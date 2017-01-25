@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="K_12Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Subcity" Type="varchar" MaxLength="50" />
+          <Property Name="Woreda" Type="int" />
+          <Property Name="Phone_work" Type="varchar" MaxLength="20" />
+          <Property Name="Phone_home" Type="varchar" MaxLength="20" />
+          <Property Name="Phone_office" Type="varchar" MaxLength="20" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Parent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FName" Type="varchar" MaxLength="20" />
+          <Property Name="MNaem" Type="varchar" MaxLength="20" />
+          <Property Name="LName" Type="varchar" MaxLength="20" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="address_id" Type="int" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FName" Type="varchar" MaxLength="20" />
+          <Property Name="MNaem" Type="varchar" MaxLength="20" />
+          <Property Name="LName" Type="varchar" MaxLength="20" />
+          <Property Name="DOB" Type="date" />
+        </EntityType>
+        <EntityType Name="student_parent">
+          <Key>
+            <PropertyRef Name="student_id" />
+            <PropertyRef Name="parent_id" />
+          </Key>
+          <Property Name="student_id" Type="int" Nullable="false" />
+          <Property Name="parent_id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_parent_address">
+          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
+          <End Role="Parent" Type="Self.Parent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Parent">
+              <PropertyRef Name="address_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_student_parent_parent">
+          <End Role="Parent" Type="Self.Parent" Multiplicity="1" />
+          <End Role="student_parent" Type="Self.student_parent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Parent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="student_parent">
+              <PropertyRef Name="parent_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_student_parent_student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="student_parent" Type="Self.student_parent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="student_parent">
+              <PropertyRef Name="student_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="K_12ModelStoreContainer">
+          <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Parent" EntityType="Self.Parent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="student_parent" EntityType="Self.student_parent" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_parent_address" Association="Self.FK_parent_address">
+            <End Role="Address" EntitySet="Address" />
+            <End Role="Parent" EntitySet="Parent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_student_parent_parent" Association="Self.FK_student_parent_parent">
+            <End Role="Parent" EntitySet="Parent" />
+            <End Role="student_parent" EntitySet="student_parent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_student_parent_student" Association="Self.FK_student_parent_student">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="student_parent" EntitySet="student_parent" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="K_12Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Subcity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Woreda" Type="Int32" />
+          <Property Name="Phone_work" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Phone_home" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Phone_office" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Parents" Relationship="Self.FK_parent_address" FromRole="Address" ToRole="Parent" />
+        </EntityType>
+        <EntityType Name="Parent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MNaem" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="address_id" Type="Int32" />
+          <NavigationProperty Name="Address" Relationship="Self.FK_parent_address" FromRole="Parent" ToRole="Address" />
+          <NavigationProperty Name="Students" Relationship="Self.student_parent" FromRole="Parent" ToRole="Student" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MNaem" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Parents" Relationship="Self.student_parent" FromRole="Student" ToRole="Parent" />
+        </EntityType>
+        <Association Name="FK_parent_address">
+          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
+          <End Role="Parent" Type="Self.Parent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Parent">
+              <PropertyRef Name="address_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="student_parent">
+          <End Role="Parent" Type="Self.Parent" Multiplicity="*" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="K_12Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Addresses" EntityType="Self.Address" />
+          <EntitySet Name="Parents" EntityType="Self.Parent" />
+          <EntitySet Name="Students" EntityType="Self.Student" />
+          <AssociationSet Name="FK_parent_address" Association="Self.FK_parent_address">
+            <End Role="Address" EntitySet="Addresses" />
+            <End Role="Parent" EntitySet="Parents" />
+          </AssociationSet>
+          <AssociationSet Name="student_parent" Association="Self.student_parent">
+            <End Role="Parent" EntitySet="Parents" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="K_12ModelStoreContainer" CdmEntityContainer="K_12Entities">
+          <EntitySetMapping Name="Addresses">
+            <EntityTypeMapping TypeName="K_12Model.Address">
+              <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Subcity" ColumnName="Subcity" />
+                <ScalarProperty Name="Woreda" ColumnName="Woreda" />
+                <ScalarProperty Name="Phone_work" ColumnName="Phone_work" />
+                <ScalarProperty Name="Phone_home" ColumnName="Phone_home" />
+                <ScalarProperty Name="Phone_office" ColumnName="Phone_office" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Parents">
+            <EntityTypeMapping TypeName="K_12Model.Parent">
+              <MappingFragment StoreEntitySet="Parent">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="MNaem" ColumnName="MNaem" />
+                <ScalarProperty Name="LName" ColumnName="LName" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="address_id" ColumnName="address_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="K_12Model.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="MNaem" ColumnName="MNaem" />
+                <ScalarProperty Name="LName" ColumnName="LName" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="student_parent" TypeName="K_12Model.student_parent" StoreEntitySet="student_parent">
+            <EndProperty Name="Parent">
+              <ScalarProperty Name="ID" ColumnName="parent_id" />
+            </EndProperty>
+            <EndProperty Name="Student">
+              <ScalarProperty Name="ID" ColumnName="student_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
