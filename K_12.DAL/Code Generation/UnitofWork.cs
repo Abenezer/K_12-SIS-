@@ -11,14 +11,34 @@ public class UnitOfWork : IUnitOfWork
     }
 
 	//Delete this default constructor if using an IoC container
-	public UnitOfWork()
-	{
-		_context = new K_12Entities();
-	}
+	//public UnitOfWork()
+	//{
+		//_context = new K_12Entities();
+	//}
 	
-    public IParentRepository Parents
+    public IPhonebookRepository PhoneBooks
     {
-        get { return new ParentRepository(_context); }
+        get { return new PhonebookRepository(_context); }
+    }
+
+    public IGradeInfoRepository Grade_Infos
+    {
+        get { return new GradeInfoRepository(_context); }
+    }
+
+    public IDocumentRepository Documents
+    {
+        get { return new DocumentRepository(_context); }
+    }
+
+    public IContactRepository Contacts
+    {
+        get { return new ContactRepository(_context); }
+    }
+
+    public IApplicationRepository Applications
+    {
+        get { return new ApplicationRepository(_context); }
     }
 
     public IAddressRepository Addresss
@@ -26,15 +46,16 @@ public class UnitOfWork : IUnitOfWork
         get { return new AddressRepository(_context); }
     }
 
-    public IStudentRepository Students
-    {
-        get { return new StudentRepository(_context); }
-    }
-
     
     public void Save()
     {
         _context.SaveChanges();
+    }
+
+	 public System.Threading.Tasks.Task<int> SaveAsync()
+    {
+       return _context.SaveChangesAsync();
+
     }
 
     public void Dispose()

@@ -54,22 +54,43 @@
     <Compile Include="Code Generation\AddressRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
+    <Compile Include="Code Generation\ApplicationRepository.cs">
+      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Code Generation\ContactRepository.cs">
+      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Code Generation\DocumentRepository.cs">
+      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Code Generation\GradeInfoRepository.cs">
+      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
+    </Compile>
     <Compile Include="Code Generation\IAddressRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="Code Generation\IParentRepository.cs">
+    <Compile Include="Code Generation\IApplicationRepository.cs">
+      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Code Generation\IContactRepository.cs">
+      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Code Generation\IDocumentRepository.cs">
+      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Code Generation\IGradeInfoRepository.cs">
+      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Code Generation\IPhonebookRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="Code Generation\IRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="Code Generation\IStudentRepository.cs">
-      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
-    </Compile>
     <Compile Include="Code Generation\IUnitofWork.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="Code Generation\ParentRepository.cs">
+    <Compile Include="Code Generation\PhonebookRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="Code Generation\Repository.cs">
@@ -78,9 +99,6 @@
     <Compile Include="Code Generation\RepositoryGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RepositoryGenerator.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Code Generation\StudentRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="Code Generation\UnitofWork.cs">

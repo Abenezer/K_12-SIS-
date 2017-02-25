@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="K_12Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="K_12Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Address">
           <Key>
             <PropertyRef Name="ID" />
@@ -12,213 +12,347 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Subcity" Type="varchar" MaxLength="50" />
           <Property Name="Woreda" Type="int" />
-          <Property Name="Phone_work" Type="varchar" MaxLength="20" />
-          <Property Name="Phone_home" Type="varchar" MaxLength="20" />
-          <Property Name="Phone_office" Type="varchar" MaxLength="20" />
           <Property Name="Email" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="Parent">
+        <EntityType Name="Application">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FName" Type="varchar" MaxLength="20" />
-          <Property Name="MNaem" Type="varchar" MaxLength="20" />
+          <Property Name="MName" Type="varchar" MaxLength="20" />
           <Property Name="LName" Type="varchar" MaxLength="20" />
+          <Property Name="Gender" Type="char" MaxLength="1" />
           <Property Name="DOB" Type="date" />
-          <Property Name="address_id" Type="int" />
+          <Property Name="status" Type="varchar" MaxLength="10" />
+          <Property Name="grade_applying" Type="varchar" MaxLength="10" />
+          <Property Name="photo_path" Type="varchar(max)" />
         </EntityType>
-        <EntityType Name="Student">
+        <EntityType Name="Application_Contact">
+          <Key>
+            <PropertyRef Name="Application_id" />
+            <PropertyRef Name="Contact_id" />
+          </Key>
+          <Property Name="Application_id" Type="int" Nullable="false" />
+          <Property Name="Contact_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Contact">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FName" Type="varchar" MaxLength="20" />
-          <Property Name="MNaem" Type="varchar" MaxLength="20" />
+          <Property Name="MName" Type="varchar" MaxLength="20" />
           <Property Name="LName" Type="varchar" MaxLength="20" />
-          <Property Name="DOB" Type="date" />
+          <Property Name="Address_id" Type="int" />
         </EntityType>
-        <EntityType Name="student_parent">
+        <EntityType Name="Document">
           <Key>
-            <PropertyRef Name="student_id" />
-            <PropertyRef Name="parent_id" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="student_id" Type="int" Nullable="false" />
-          <Property Name="parent_id" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Application_id" Type="int" />
+          <Property Name="Doc_path" Type="varchar(max)" />
+          <Property Name="IsVerified" Type="bit" />
+          <Property Name="type" Type="varchar" MaxLength="20" />
         </EntityType>
-        <Association Name="FK_parent_address">
+        <EntityType Name="Grade_Info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Grade" Type="varchar" MaxLength="10" />
+          <Property Name="Fee" Type="int" />
+          <Property Name="Curriculum" Type="varchar(max)" />
+          <Property Name="Other_info" Type="varchar(max)" />
+          <Property Name="Capacity" Type="int" />
+          <Property Name="Current_students" Type="int" />
+        </EntityType>
+        <EntityType Name="PhoneBook">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Address_id" Type="int" />
+          <Property Name="Type" Type="varchar" MaxLength="10" />
+          <Property Name="Phone" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK_application_Application_Contact">
+          <End Role="Application" Type="Self.Application" Multiplicity="1" />
+          <End Role="Application_Contact" Type="Self.Application_Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Application">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Application_Contact">
+              <PropertyRef Name="Application_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contact_address">
           <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
-          <End Role="Parent" Type="Self.Parent" Multiplicity="*" />
+          <End Role="Contact" Type="Self.Contact" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Address">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Parent">
-              <PropertyRef Name="address_id" />
+            <Dependent Role="Contact">
+              <PropertyRef Name="Address_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_student_parent_parent">
-          <End Role="Parent" Type="Self.Parent" Multiplicity="1" />
-          <End Role="student_parent" Type="Self.student_parent" Multiplicity="*" />
+        <Association Name="FK_contact_Application_Contact">
+          <End Role="Contact" Type="Self.Contact" Multiplicity="1" />
+          <End Role="Application_Contact" Type="Self.Application_Contact" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Parent">
+            <Principal Role="Contact">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="student_parent">
-              <PropertyRef Name="parent_id" />
+            <Dependent Role="Application_Contact">
+              <PropertyRef Name="Contact_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_student_parent_student">
-          <End Role="Student" Type="Self.Student" Multiplicity="1" />
-          <End Role="student_parent" Type="Self.student_parent" Multiplicity="*" />
+        <Association Name="FK_document_application">
+          <End Role="Application" Type="Self.Application" Multiplicity="0..1" />
+          <End Role="Document" Type="Self.Document" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Student">
+            <Principal Role="Application">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="student_parent">
-              <PropertyRef Name="student_id" />
+            <Dependent Role="Document">
+              <PropertyRef Name="Application_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhoneBook_address">
+          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
+          <End Role="PhoneBook" Type="Self.PhoneBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PhoneBook">
+              <PropertyRef Name="Address_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="K_12ModelStoreContainer">
           <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Parent" EntityType="Self.Parent" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="student_parent" EntityType="Self.student_parent" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_parent_address" Association="Self.FK_parent_address">
+          <EntitySet Name="Application" EntityType="Self.Application" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Application_Contact" EntityType="Self.Application_Contact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contact" EntityType="Self.Contact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Document" EntityType="Self.Document" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Grade_Info" EntityType="Self.Grade_Info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PhoneBook" EntityType="Self.PhoneBook" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_application_Application_Contact" Association="Self.FK_application_Application_Contact">
+            <End Role="Application" EntitySet="Application" />
+            <End Role="Application_Contact" EntitySet="Application_Contact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contact_address" Association="Self.FK_contact_address">
             <End Role="Address" EntitySet="Address" />
-            <End Role="Parent" EntitySet="Parent" />
+            <End Role="Contact" EntitySet="Contact" />
           </AssociationSet>
-          <AssociationSet Name="FK_student_parent_parent" Association="Self.FK_student_parent_parent">
-            <End Role="Parent" EntitySet="Parent" />
-            <End Role="student_parent" EntitySet="student_parent" />
+          <AssociationSet Name="FK_contact_Application_Contact" Association="Self.FK_contact_Application_Contact">
+            <End Role="Contact" EntitySet="Contact" />
+            <End Role="Application_Contact" EntitySet="Application_Contact" />
           </AssociationSet>
-          <AssociationSet Name="FK_student_parent_student" Association="Self.FK_student_parent_student">
-            <End Role="Student" EntitySet="Student" />
-            <End Role="student_parent" EntitySet="student_parent" />
+          <AssociationSet Name="FK_document_application" Association="Self.FK_document_application">
+            <End Role="Application" EntitySet="Application" />
+            <End Role="Document" EntitySet="Document" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhoneBook_address" Association="Self.FK_PhoneBook_address">
+            <End Role="Address" EntitySet="Address" />
+            <End Role="PhoneBook" EntitySet="PhoneBook" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="K_12Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Address">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        <EntityContainer Name="K_12Entities" annotation:LazyLoadingEnabled="true">
+          <AssociationSet Name="FK_document_application" Association="K_12Model.FK_document_application">
+            <End Role="Application" EntitySet="BaseEntities" />
+            <End Role="Document" EntitySet="BaseEntities" />
+          </AssociationSet>
+          <AssociationSet Name="Application_Contact" Association="K_12Model.Application_Contact">
+            <End Role="Application" EntitySet="BaseEntities" />
+            <End Role="Contact" EntitySet="BaseEntities" />
+          </AssociationSet>
+          <EntitySet Name="BaseEntities" EntityType="K_12Model.BaseEntity" />
+          <AssociationSet Name="FK_contact_address" Association="K_12Model.FK_contact_address">
+            <End Role="Address" EntitySet="BaseEntities" />
+            <End Role="Contact" EntitySet="BaseEntities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhoneBook_address" Association="K_12Model.FK_PhoneBook_address">
+            <End Role="Address" EntitySet="BaseEntities" />
+            <End Role="PhoneBook" EntitySet="BaseEntities" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Application" BaseType="K_12Model.BaseEntity">
+          <Property Name="FName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="grade_applying" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="photo_path" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Documents" Relationship="K_12Model.FK_document_application" FromRole="Application" ToRole="Document" />
+          <NavigationProperty Name="Contacts" Relationship="K_12Model.Application_Contact" FromRole="Application" ToRole="Contact" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Contact" BaseType="K_12Model.BaseEntity">
+          <Property Name="FName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Address_id" Type="Int32" />
+          <NavigationProperty Name="Address" Relationship="K_12Model.FK_contact_address" FromRole="Contact" ToRole="Address" />
+        </EntityType>
+        <EntityType Name="Document" BaseType="K_12Model.BaseEntity">
+          <Property Name="Application_id" Type="Int32" />
+          <Property Name="Doc_path" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsVerified" Type="Boolean" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Application" Relationship="K_12Model.FK_document_application" FromRole="Document" ToRole="Application" />
+        </EntityType>
+        <EntityType Name="Grade_Info" BaseType="K_12Model.BaseEntity">
+          <Property Name="Grade" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Fee" Type="Int32" />
+          <Property Name="Curriculum" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Other_info" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Capacity" Type="Int32" />
+          <Property Name="Current_students" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PhoneBook" BaseType="K_12Model.BaseEntity">
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Address_id" Type="Int32" />
+          <NavigationProperty Name="Address" Relationship="K_12Model.FK_PhoneBook_address" FromRole="PhoneBook" ToRole="Address" />
+        </EntityType>
+        <Association Name="FK_document_application">
+          <End Type="K_12Model.Application" Role="Application" Multiplicity="0..1" />
+          <End Type="K_12Model.Document" Role="Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Application">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Document">
+              <PropertyRef Name="Application_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Application_Contact">
+          <End Type="K_12Model.Application" Role="Application" Multiplicity="*" />
+          <End Type="K_12Model.Contact" Role="Contact" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Address" BaseType="K_12Model.BaseEntity">
           <Property Name="Subcity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Woreda" Type="Int32" />
-          <Property Name="Phone_work" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Phone_home" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Phone_office" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Parents" Relationship="Self.FK_parent_address" FromRole="Address" ToRole="Parent" />
+          <NavigationProperty Name="PhoneBooks" Relationship="K_12Model.FK_PhoneBook_address" FromRole="Address" ToRole="PhoneBook" />
         </EntityType>
-        <EntityType Name="Parent">
+        <EntityType Name="BaseEntity" Abstract="true">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="MNaem" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="LName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="DOB" Type="DateTime" Precision="0" />
-          <Property Name="address_id" Type="Int32" />
-          <NavigationProperty Name="Address" Relationship="Self.FK_parent_address" FromRole="Parent" ToRole="Address" />
-          <NavigationProperty Name="Students" Relationship="Self.student_parent" FromRole="Parent" ToRole="Student" />
         </EntityType>
-        <EntityType Name="Student">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="MNaem" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="LName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="DOB" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Parents" Relationship="Self.student_parent" FromRole="Student" ToRole="Parent" />
-        </EntityType>
-        <Association Name="FK_parent_address">
-          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
-          <End Role="Parent" Type="Self.Parent" Multiplicity="*" />
+        <Association Name="FK_contact_address">
+          <End Type="K_12Model.Address" Role="Address" Multiplicity="0..1" />
+          <End Type="K_12Model.Contact" Role="Contact" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Address">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Parent">
-              <PropertyRef Name="address_id" />
+            <Dependent Role="Contact">
+              <PropertyRef Name="Address_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="student_parent">
-          <End Role="Parent" Type="Self.Parent" Multiplicity="*" />
-          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+        <Association Name="FK_PhoneBook_address">
+          <End Type="K_12Model.Address" Role="Address" Multiplicity="0..1" />
+          <End Type="K_12Model.PhoneBook" Role="PhoneBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PhoneBook">
+              <PropertyRef Name="Address_id" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="K_12Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Addresses" EntityType="Self.Address" />
-          <EntitySet Name="Parents" EntityType="Self.Parent" />
-          <EntitySet Name="Students" EntityType="Self.Student" />
-          <AssociationSet Name="FK_parent_address" Association="Self.FK_parent_address">
-            <End Role="Address" EntitySet="Addresses" />
-            <End Role="Parent" EntitySet="Parents" />
-          </AssociationSet>
-          <AssociationSet Name="student_parent" Association="Self.student_parent">
-            <End Role="Parent" EntitySet="Parents" />
-            <End Role="Student" EntitySet="Students" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="K_12ModelStoreContainer" CdmEntityContainer="K_12Entities">
-          <EntitySetMapping Name="Addresses">
-            <EntityTypeMapping TypeName="K_12Model.Address">
+          <EntitySetMapping Name="BaseEntities">
+            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.PhoneBook)">
+              <MappingFragment StoreEntitySet="PhoneBook">
+                <ScalarProperty Name="Address_id" ColumnName="Address_id" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.Grade_Info)">
+              <MappingFragment StoreEntitySet="Grade_Info">
+                <ScalarProperty Name="Current_students" ColumnName="Current_students" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="Curriculum" ColumnName="Curriculum" />
+                <ScalarProperty Name="Other_info" ColumnName="Other_info" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.Document)">
+              <MappingFragment StoreEntitySet="Document">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Application_id" ColumnName="Application_id" />
+                <ScalarProperty Name="Doc_path" ColumnName="Doc_path" />
+                <ScalarProperty Name="IsVerified" ColumnName="IsVerified" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.Application)">
+              <MappingFragment StoreEntitySet="Application">
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="MName" ColumnName="MName" />
+                <ScalarProperty Name="LName" ColumnName="LName" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="grade_applying" ColumnName="grade_applying" />
+                <ScalarProperty Name="photo_path" ColumnName="photo_path" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.Contact)">
+              <MappingFragment StoreEntitySet="Contact">
+                <ScalarProperty Name="Address_id" ColumnName="Address_id" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="MName" ColumnName="MName" />
+                <ScalarProperty Name="LName" ColumnName="LName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.Address)">
               <MappingFragment StoreEntitySet="Address">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Subcity" ColumnName="Subcity" />
                 <ScalarProperty Name="Woreda" ColumnName="Woreda" />
-                <ScalarProperty Name="Phone_work" ColumnName="Phone_work" />
-                <ScalarProperty Name="Phone_home" ColumnName="Phone_home" />
-                <ScalarProperty Name="Phone_office" ColumnName="Phone_office" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Parents">
-            <EntityTypeMapping TypeName="K_12Model.Parent">
-              <MappingFragment StoreEntitySet="Parent">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="FName" ColumnName="FName" />
-                <ScalarProperty Name="MNaem" ColumnName="MNaem" />
-                <ScalarProperty Name="LName" ColumnName="LName" />
-                <ScalarProperty Name="DOB" ColumnName="DOB" />
-                <ScalarProperty Name="address_id" ColumnName="address_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Students">
-            <EntityTypeMapping TypeName="K_12Model.Student">
-              <MappingFragment StoreEntitySet="Student">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="FName" ColumnName="FName" />
-                <ScalarProperty Name="MNaem" ColumnName="MNaem" />
-                <ScalarProperty Name="LName" ColumnName="LName" />
-                <ScalarProperty Name="DOB" ColumnName="DOB" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="student_parent" TypeName="K_12Model.student_parent" StoreEntitySet="student_parent">
-            <EndProperty Name="Parent">
-              <ScalarProperty Name="ID" ColumnName="parent_id" />
+          <AssociationSetMapping Name="Application_Contact" TypeName="K_12Model.Application_Contact" StoreEntitySet="Application_Contact" >
+            <EndProperty Name="Contact">
+              <ScalarProperty Name="ID" ColumnName="Contact_id" />
             </EndProperty>
-            <EndProperty Name="Student">
-              <ScalarProperty Name="ID" ColumnName="student_id" />
+            <EndProperty Name="Application">
+              <ScalarProperty Name="ID" ColumnName="Application_id" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>

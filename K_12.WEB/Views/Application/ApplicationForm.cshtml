@@ -1,0 +1,133 @@
+﻿@model K_12.Entity.Application
+
+
+
+
+@using (Ajax.BeginForm(
+    "applicationForm",
+    null,
+
+    new AjaxOptions()
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "appform",
+        OnSuccess = "onSuccess"
+
+
+
+    },
+    new { @class = "form-horizontal" } // htmlAttributes
+
+
+    ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+
+ 
+
+
+
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Student Info</legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="student_fname">Student Name</label>
+            <div class="col-md-4">
+                @*<input id="student_fname" name="student_fname" type="text" placeholder="FirstName" class="form-control input-md" value="@Model.FName">*@
+                @Html.TextBoxFor(model => model.FName, new { @class = "form-control input-md", @PlaceHolder = "First Name" })
+            </div>
+
+            <div class="col-md-4">
+                @*@Html.EditorFor(m => m.LName, new { htmlAttributes = new { @class = "form-control input-md" } })*@
+                @Html.TextBoxFor(model => model.LName, new { @class = "form-control input-md", @PlaceHolder = "Last Name" })
+            </div>
+        </div>
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="student_sex">Gender</label>
+            <div class="col-md-4">
+              
+      @(Html.Kendo().ComboBoxFor(m=> m.Gender)
+          
+            .Placeholder("Select Gender")
+            .DataTextField("Text")
+            .DataValueField("Value")
+            
+          .BindTo(new List<SelectListItem>() {
+              new SelectListItem() {
+                Text = "Male", Value = "M"
+              },
+              new SelectListItem() {
+                Text = "Female", Value = "F"
+              },
+
+          })
+
+                    .HtmlAttributes(new { @class = "form-control" })
+                )
+
+
+
+
+
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="student_dob">Date of Birth</label>
+            <div class="col-md-4">
+               @* <input id="student_dob" name="student_dob" type="text" placeholder="DD/MM/YY" class="form-control input-md">*@
+                @(Html.Kendo().DatePickerFor(m => m.DOB)
+                    .HtmlAttributes(new { PlaceHolder = "Birth Date" }))
+                    
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Contact Info</legend>
+
+      
+
+        @Html.EditorFor(model => model.Contacts)
+     
+
+
+    </fieldset>
+
+
+    <!-- Button (Double) -->
+
+
+        <div class="col-md-8">
+            <button id="bc_btn" name="bc_btn" class="btn btn-primary">Back</button>
+            <button id="reset_btn" name="reset_btn" class="btn btn-danger" type="reset">Reset</button>
+            <button id="nxt_btn" name="nxt_btn" class="btn btn-success" type="submit">Next</button>
+        </div>
+
+
+}
+
+
+<script type="text/javascript">
+
+    var onSuccess = function (result) { window.location.href = "spa#/"; }
+
+</script>
+
+
+
+
+
+<h1> XXX HOHOHO</h1>

@@ -1,0 +1,68 @@
+﻿@model K_12.WEB.Models.GradeViewModel
+<link href="@Url.Content("~/Content/kendo/2015.3.1111/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/kendo/2015.3.1111/kendo.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/kendo/2015.3.1111/kendo.dataviz.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/kendo/2015.3.1111/kendo.common-bootstrap.min.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/Scripts/kendo/2015.3.1111/jszip.min.js")"/>
+
+    
+    <script src="~/Scripts/kendo/2015.3.1111/jquery.min.js"></script>
+<script src="~/Scripts/kendo/2015.3.1111/kendo.all.min.js"></script>
+<script src="~/Scripts/kendo/2015.3.1111/kendo.aspnetmvc.min.js"></script>
+<h1>HIHIH</h1>
+  <!-- Select Basic -->
+<div class="form-group">
+    <label class="col-md-4 control-label" >Grade/label>
+    <div class="col-md-4">
+
+        @(Html.Kendo().ComboBoxFor(m => m.Grade)
+
+            .Placeholder("Grade")
+            .DataTextField("Text")
+            .DataValueField("Value")
+
+          .BindTo(new List<SelectListItem>() {
+              new SelectListItem() {
+                Text = "Grade 1", Value = "1"
+              },
+              new SelectListItem() {
+                Text = "Grade 2", Value = "2"
+              },
+
+          })
+
+                    .HtmlAttributes(new { @class = "form-control" })
+        )
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+@(Html.Kendo().Grid<K_12.Entity.Application>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.FName);
+            columns.Bound(c => c.LName);
+            columns.Bound(c => c.Gender).Width(150);
+        })
+        .HtmlAttributes(new { style = "height: 550px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetApplications", "Application"))
+            .PageSize(20)
+        )
+)

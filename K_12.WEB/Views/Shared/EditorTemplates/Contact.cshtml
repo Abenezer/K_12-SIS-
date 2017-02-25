@@ -1,0 +1,34 @@
+﻿@model K_12.Entity.Contact
+
+
+
+   <!-- Text input-->
+<div class="form-group">
+    <label class="col-md-4 control-label" for="Contact_fname">Contact Name</label>
+    <div class="col-md-4">
+        @*<input id="contact_fname" name="contact_fname" type="text" placeholder="FirstName" class="form-control input-md">*@
+        @Html.TextBoxFor(model => model.FName, new { @class = "form-control input-md", @PlaceHolder = "First Name" })
+    </div>
+
+    <div class="col-md-4">
+        @*<input id="contact_lname" name="contact_lname" type="text" placeholder="LastName" class="form-control input-md">*@
+        @Html.TextBoxFor(model => model.LName, new { @class = "form-control input-md", @PlaceHolder = "Last Name" })
+    </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+    <label class="col-md-4 control-label" for="contact_phone">Phone</label>
+    <div class="col-md-4">
+        @Html.EditorFor(model => model.Address.PhoneBooks)
+
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-4 control-label" > Email</label>
+    <div class="col-md-4">
+        @Html.TextBoxFor(model => model.Address.Email, new { @class = "form-control", @PlaceHolder = "Email" })
+
+    </div>
+</div>

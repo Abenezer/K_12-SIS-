@@ -41,8 +41,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\AddressService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ApplicationService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ContactService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\DocumentService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\GradeInfoService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\PhonebookService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
     <Compile Include="Service\Service.cs" />
-    <Compile Include="Service\StudentService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\K_12.DAL\K_12.DAL.csproj">
@@ -53,6 +70,18 @@
       <Project>{7488c602-96ca-4d88-ba16-1c6187dbf894}</Project>
       <Name>K_12.Entity</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Service\EntityServices.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EntityServices.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service\T4Helper.ttinclude" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

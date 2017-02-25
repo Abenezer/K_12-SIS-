@@ -1,0 +1,7 @@
+﻿@model K_12.Entity.PhoneBook
+
+@(Html.Kendo().MaskedTextBoxFor(model => model.Phone)
+    .HtmlAttributes(new { @class = "form-control"})
+.Mask("(999) 000-0000")
+
+)

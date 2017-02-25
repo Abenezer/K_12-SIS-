@@ -1,0 +1,7 @@
+﻿@model K_12.Entity.Address 
+
+@Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+
+@(Html.TextBoxFor(model => model.Subcity, new { @class = "form-control", placeholder = "Subcity" }))
+
+@Html.EditorFor(model => model.PhoneBooks)

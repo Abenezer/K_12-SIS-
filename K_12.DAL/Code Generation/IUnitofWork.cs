@@ -2,8 +2,13 @@
 
 public interface IUnitOfWork : IDisposable
 {
-    IParentRepository Parents { get; }
+    IPhonebookRepository PhoneBooks { get; }
+    IGradeInfoRepository Grade_Infos { get; }
+    IDocumentRepository Documents { get; }
+    IContactRepository Contacts { get; }
+    IApplicationRepository Applications { get; }
     IAddressRepository Addresss { get; }
-    IStudentRepository Students { get; }
     void Save();
+System.Threading.Tasks.Task<int> SaveAsync();
+    
 }

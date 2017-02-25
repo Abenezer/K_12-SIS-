@@ -12,23 +12,19 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Address
+    public partial class Address : BaseEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Address()
         {
-            this.Parents = new HashSet<Parent>();
+            this.PhoneBooks = new HashSet<PhoneBook>();
         }
     
-        public int ID { get; set; }
         public string Subcity { get; set; }
         public Nullable<int> Woreda { get; set; }
-        public string Phone_work { get; set; }
-        public string Phone_home { get; set; }
-        public string Phone_office { get; set; }
         public string Email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Parent> Parents { get; set; }
+        public virtual ICollection<PhoneBook> PhoneBooks { get; set; }
     }
 }

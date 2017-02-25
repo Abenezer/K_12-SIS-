@@ -1,0 +1,11 @@
+{
+  "name": "k_12.web",
+  "version": "1.0.0",
+  "description": "cloud based k-12 studnet information and assesment system",
+  "main": "packages.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "damaben",
+  "license": "ISC"
+}

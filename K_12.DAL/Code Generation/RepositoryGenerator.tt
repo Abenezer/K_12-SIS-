@@ -49,6 +49,8 @@ public interface IUnitOfWork : IDisposable
     }
     #>
 void Save();
+System.Threading.Tasks.Task<int> SaveAsync();
+    
 }
 <# CreateFile("IUnitofWork.cs"); #>
 using System;
@@ -64,10 +66,10 @@ public class UnitOfWork : IUnitOfWork
     }
 
 	//Delete this default constructor if using an IoC container
-	public UnitOfWork()
-	{
-		_context = new <#= efContext #>();
-	}
+	//public UnitOfWork()
+	//{
+		//_context = new <#= efContext #>();
+	//}
 	
     <#foreach(string className in classNames)
     {
@@ -84,6 +86,12 @@ public <#= repositoryInterfaceName + " " + className+"s"#>
     public void Save()
     {
         _context.SaveChanges();
+    }
+
+	 public System.Threading.Tasks.Task<int> SaveAsync()
+    {
+       return _context.SaveChangesAsync();
+
     }
 
     public void Dispose()

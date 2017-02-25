@@ -25,8 +25,6 @@ namespace K_12.Entity
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Address> Addresses { get; set; }
-        public virtual DbSet<Parent> Parents { get; set; }
-        public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<BaseEntity> BaseEntities { get; set; }
     }
 }

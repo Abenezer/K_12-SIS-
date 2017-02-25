@@ -13,30 +13,77 @@ namespace K_12.UnitTest
 
             UnitOfWork uw = new UnitOfWork(new Entity.K_12Entities());
 
-            Entity.Student s = new Entity.Student();
-            s.FName = "Abebe";
-            s.LName = "kebede";
+            Entity.Contact c = new Entity.Contact();
+            c.FName = "Abebe";
+            c.LName = "kebede";
 
-            uw.Students.Add(s);
+            uw.Contacts.Add(c);
 
             uw.Save();
 
-            Entity.Student s2 = uw.Students.Find(1);
+            Entity.Contact c2 = uw.Contacts.Find(1);
 
-            Assert.AreEqual(s.FName, s2.FName);
+            Assert.AreEqual(c.FName, c2.FName);
 
-            
+
 
         }
+
+        [TestMethod]
+        public void TestCascadeInsert()
+        {
+
+            Entity.Application app = new Entity.Application();
+            app.FName = "Abebe";
+            app.LName = "Kebede";
+
+            Entity.Contact c = new Entity.Contact();
+            c.FName = "Aster";
+            c.LName = "Chala";
+            c.Address = new Entity.Address();
+            c.Address.Email = "Abebe@gmail.com";
+
+
+           // app.Contacts.Add(c);
+
+
+            UnitOfWork uw = new UnitOfWork(new Entity.K_12Entities());
+            //IApplicationService app_servie = new ApplicationService(uw.Applications);
+
+            // app_servie.Insert(app);
+            uw.Contacts.Add(c);
+
+            uw.Save();
+            
+
+            //Entity.Application a2 = app_servie.Find(1);
+            Assert.AreEqual(uw.Contacts.Find(1).Address.Email, c.Address.Email);
+        }
+        
 
         [TestMethod]
         public void TestService()
         {
             UnitOfWork uw = new UnitOfWork(new Entity.K_12Entities());
 
-            StudentService ss = new StudentService(uw.Students);
+          IContactService cont_serv = new ContactService(uw.Contacts);
 
-           Assert.IsNotNull(ss.Find(1));
+            Entity.Contact c = cont_serv.Find(1);
+
+            Entity.Address a = new Entity.Address();
+
+            a.Email= "abebaaae@gmail.com";
+           
+            c.Address = a;
+           
+            cont_serv.Update(c);
+
+            uw.Save();
+
+            Entity.Contact c2 = cont_serv.Find(1);
+
+
+            Assert.AreEqual(c.Address.Email, c2.Address.Email);
         }
 
     }

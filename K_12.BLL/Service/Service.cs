@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace K_12.BLL.Service
 
     public interface IService<TEntity>
     {
-
+     
         void Insert(TEntity entity);
         void InsertRange(IEnumerable<TEntity> entities);
         void Update(TEntity entity);
@@ -19,6 +20,7 @@ namespace K_12.BLL.Service
         TEntity Find(params object[] keyValues);
         IQueryable<TEntity> SelectQuery(string query, params object[] parameters);
 
+        //IEnumerable<TResult> Query<TResult>(Expression<Func<TEntity, TResult>> selector = null);
         IQueryable<TEntity> Queryable();
 
 
@@ -65,6 +67,8 @@ namespace K_12.BLL.Service
                 Insert(entity);
             }
         }
+
+        
 
         public IQueryable<TEntity> Queryable()
         {
