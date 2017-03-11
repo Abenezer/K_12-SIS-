@@ -12,13 +12,11 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Grade_Info : BaseEntity 
+    public abstract partial class Person : BaseEntity 
     {
-        public string Grade { get; set; }
-        public Nullable<int> Fee { get; set; }
-        public string Curriculum { get; set; }
-        public string Other_info { get; set; }
-        public Nullable<int> Capacity { get; set; }
-        public Nullable<int> Current_students { get; set; }
+        public string FName { get; set; }
+        public string LName { get; set; }
+        public string MName { get; set; }
+        public string Gender { get; set; }
     }
 }

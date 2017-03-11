@@ -1,20 +1,26 @@
 ﻿require.config({
+    
     paths: {
         // Packages
         'jquery': '/scripts/jquery-1.10.2.min',
-        'kendo': '/scripts/kendo/2015.3.1111/kendo.web.min',
+        'kendo': '/scripts/kendo/2015.3.1111/kendo.all.min',
+        'kendo_mvc': '/scripts/kendo/2015.3.1111/kendo.aspnetmvc.min',
         'text': '/scripts/text',
-        'router': '/scripts/app/router'
+        'router': '/scripts/app/router',
+        'domain': '/scripts/app/domain'
     },
     shim: {
-        'kendo': ['jquery']
+       
+        'kendo_mvc' : ['kendo'],
+         'kendo': ['jquery']
+        
     },
     priority: ['text', 'router', 'app'],
     jquery: '1.10.2',
     waitSeconds: 30
 });
 require([
-  'app'
+  'app','domain'
 ], function (app) {
     app.initialize();
 });

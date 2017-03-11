@@ -12,13 +12,13 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Document : BaseEntity
+    public partial class Document : BaseEntity 
     {
-        public Nullable<int> Application_id { get; set; }
+        public Nullable<int> Applicant_id { get; set; }
         public string Doc_path { get; set; }
         public Nullable<bool> IsVerified { get; set; }
         public string type { get; set; }
     
-        public virtual Application Application { get; set; }
+        public virtual Applicant Applicant { get; set; }
     }
 }

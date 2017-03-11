@@ -14,14 +14,14 @@ namespace K_12.UnitTest
             UnitOfWork uw = new UnitOfWork(new Entity.K_12Entities());
 
             Entity.Contact c = new Entity.Contact();
-            c.FName = "Abebe";
+            c.FName = "Wende";
             c.LName = "kebede";
-
+           
             uw.Contacts.Add(c);
 
             uw.Save();
 
-            Entity.Contact c2 = uw.Contacts.Find(1);
+            Entity.Contact c2 = uw.Contacts.Find(c.ID);
 
             Assert.AreEqual(c.FName, c2.FName);
 
@@ -33,7 +33,7 @@ namespace K_12.UnitTest
         public void TestCascadeInsert()
         {
 
-            Entity.Application app = new Entity.Application();
+            Entity.Applicant app = new Entity.Applicant();
             app.FName = "Abebe";
             app.LName = "Kebede";
 
@@ -48,7 +48,7 @@ namespace K_12.UnitTest
 
 
             UnitOfWork uw = new UnitOfWork(new Entity.K_12Entities());
-            //IApplicationService app_servie = new ApplicationService(uw.Applications);
+            //IApplicantService app_servie = new ApplicantService(uw.Applicants);
 
             // app_servie.Insert(app);
             uw.Contacts.Add(c);
@@ -56,8 +56,8 @@ namespace K_12.UnitTest
             uw.Save();
             
 
-            //Entity.Application a2 = app_servie.Find(1);
-            Assert.AreEqual(uw.Contacts.Find(1).Address.Email, c.Address.Email);
+            //Entity.Applicant a2 = app_servie.Find(1);
+            Assert.AreEqual(uw.Contacts.Find(c.ID).Address.Email, c.Address.Email);
         }
         
 
@@ -68,7 +68,7 @@ namespace K_12.UnitTest
 
           IContactService cont_serv = new ContactService(uw.Contacts);
 
-            Entity.Contact c = cont_serv.Find(1);
+            Entity.Contact c = cont_serv.Find(2);
 
             Entity.Address a = new Entity.Address();
 
@@ -80,7 +80,7 @@ namespace K_12.UnitTest
 
             uw.Save();
 
-            Entity.Contact c2 = cont_serv.Find(1);
+            Entity.Contact c2 = cont_serv.Find(c.ID);
 
 
             Assert.AreEqual(c.Address.Email, c2.Address.Email);

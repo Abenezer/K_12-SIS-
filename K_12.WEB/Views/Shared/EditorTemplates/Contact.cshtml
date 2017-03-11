@@ -2,33 +2,36 @@
 
 
 
-   <!-- Text input-->
 <div class="form-group">
-    <label class="col-md-4 control-label" for="Contact_fname">Contact Name</label>
-    <div class="col-md-4">
-        @*<input id="contact_fname" name="contact_fname" type="text" placeholder="FirstName" class="form-control input-md">*@
-        @Html.TextBoxFor(model => model.FName, new { @class = "form-control input-md", @PlaceHolder = "First Name" })
+    @Html.LabelFor(m => m.FName, "Full Name", new { @class = "col-sm-4 control-label" })
+
+
+    <div class="col-sm-4">
+        @*<span class="k-textbox k-space-right" style="width:100%;">*@
+        @Html.TextBoxFor(model => model.FName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "First Name" })
+        @*<a href="#" class="k-icon k-i-arrow-s">&nbsp;</a>*@
+        @*</span>*@
     </div>
 
-    <div class="col-md-4">
-        @*<input id="contact_lname" name="contact_lname" type="text" placeholder="LastName" class="form-control input-md">*@
-        @Html.TextBoxFor(model => model.LName, new { @class = "form-control input-md", @PlaceHolder = "Last Name" })
+
+    <div class="col-sm-4">
+        @Html.TextBoxFor(model => model.LName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Last Name" })
     </div>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-    <label class="col-md-4 control-label" for="contact_phone">Phone</label>
-    <div class="col-md-4">
+    @Html.LabelFor(m => m.Address.PhoneBooks, "Phone Numbers", new { @class = "col-sm-4 control-label" })
+   
         @Html.EditorFor(model => model.Address.PhoneBooks)
 
-    </div>
+   
 </div>
 
 <div class="form-group">
-    <label class="col-md-4 control-label" > Email</label>
-    <div class="col-md-4">
-        @Html.TextBoxFor(model => model.Address.Email, new { @class = "form-control", @PlaceHolder = "Email" })
+    @Html.LabelFor(m => m.Address.Email, "Email", new { @class = "col-sm-4 control-label" })
+    <div class="col-sm-4">
+        @Html.TextBoxFor(model => model.Address.Email, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Email" })
 
     </div>
 </div>

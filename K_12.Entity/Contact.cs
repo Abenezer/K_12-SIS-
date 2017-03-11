@@ -12,11 +12,8 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Contact : BaseEntity
+    public partial class Contact : Person 
     {
-        public string FName { get; set; }
-        public string MName { get; set; }
-        public string LName { get; set; }
         public Nullable<int> Address_id { get; set; }
     
         public virtual Address Address { get; set; }

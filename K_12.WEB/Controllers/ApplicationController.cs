@@ -6,18 +6,22 @@ using System.Web.Mvc;
 using K_12.BLL.Service;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using System.Threading.Tasks;
+using System.Data.Entity.Infrastructure;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace K_12.WEB.Controllers
 {
     public class ApplicationController : Controller
     {
 
-        protected readonly IApplicationService _service;
+        protected readonly IApplicantService _service;
         private readonly IUnitOfWork _unitOfWork;
 
         public ApplicationController(
             IUnitOfWork unitOfWork,
-            IApplicationService service)
+            IApplicantService service)
         {
             _unitOfWork = unitOfWork;
             _service = service;
@@ -25,40 +29,428 @@ namespace K_12.WEB.Controllers
 
 
 
+        private Entity.Applicant GetApplicant()
+        {
+            if (Session["applicant"] == null)
+            {
+                Entity.Applicant app = new Entity.Applicant();
+                //Entity.Address address = new Entity.Address();
+
+                //address.PhoneBooks.Add(new Entity.PhoneBook() { Type = "Mobile" });
+                //address.PhoneBooks.Add(new Entity.PhoneBook() { Type = "Office" });
+
+                //app.Contacts.Add(new Entity.Contact() { Address = address });
+
+                Session["applicant"] = app;
+            }
+            return (Entity.Applicant)Session["applicant"];
+        }
+
+
+
+        private ICollection<Models.FileUploadViewModel> GetDocuments()
+        {
+            if (Session["applicantDocuments"] == null)
+            {
+               
+
+                ICollection<Models.FileUploadViewModel> fileList = new HashSet<Models.FileUploadViewModel>();
+
+
+                fileList.Add(new Models.FileUploadViewModel() { Type = "Vacination" });
+                fileList.Add(new Models.FileUploadViewModel() { Type = "PreviousRecord" });
+                fileList.Add(new Models.FileUploadViewModel() { Type = "BirthCeritificate" });
+                fileList.Add(new Models.FileUploadViewModel() { Type = "Other" });
+
+
+
+
+                Session["applicantDocuments"] = fileList;
+            }
+            return (ICollection<Models.FileUploadViewModel>)Session["applicantDocuments"];
+        }
+
+
+
+
         // GET: Administration
         public ActionResult Index()
         {
-            return View(new Models.GradeViewModel());
+
+           
+            ViewBag.Title = BLL.BLL.Configuration.ApplicationTitle;
+            return View();
         }
 
-        public ActionResult ApplicationForm()
+
+        public ActionResult GradeSelection()
         {
-            Entity.Application app = new Entity.Application();
-            Entity.Address address = new Entity.Address();
-            address.PhoneBooks.Add(new Entity.PhoneBook());
-            address.PhoneBooks.Add(new Entity.PhoneBook());
 
-            app.Contacts.Add(new Entity.Contact() {Address = address });
-            
 
-            return View(app);
+           
+            return View();
         }
+
 
         [HttpPost]
-        public ActionResult ApplicationForm(Entity.Application app)
+        public ActionResult GradeSelection(Models.GradeViewModel grade, string ButtonType)
         {
-            _service.Insert(app);
-            _unitOfWork.SaveAsync();
+           
+            if (ButtonType == "Next")
+            {
+                if (ModelState.IsValid)
+                {
+                    Entity.Applicant currentApplicant = GetApplicant();
+                    currentApplicant.grade_applying_id = grade.ID;
+                    Models.ApplicantBasicViewModel appViewModel = new Models.ApplicantBasicViewModel(); 
 
-         
-            return Json(app.ID, JsonRequestBehavior.AllowGet);
+                    //if(currentApplicant.Contacts.Count!=0)
+                   appViewModel = AutoMapper.Mapper.Map<Entity.Applicant, Models.ApplicantBasicViewModel>(currentApplicant);
+
+                    //ModelState.Clear();
+                    return View("ApplicationForm", appViewModel);
+                }
+            }
+            return View();
+
         }
 
 
-        public ActionResult GetApplications([DataSourceRequest]DataSourceRequest request)
+
+        public ActionResult GetGrades()
         {
-            return Json(_service.Queryable().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+            IQueryable<Models.GradeViewModel> grades = _unitOfWork.Grade_Infos.Queryable()
+                .Select(g => new Models.GradeViewModel()
+                {
+                    ID = g.ID,
+                    Grade = g.Grade
+                  
+                    
+                });
+
+            return Json(grades, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GradeInfo(int ID)
+        {
+            
+            return PartialView(_unitOfWork.Grade_Infos.Find(ID));
+        }
+
+
+
+        //public ActionResult ApplicationForm()
+        //{
+        //    Entity.Applicant app = new Entity.Applicant();
+        //    Entity.Address address = new Entity.Address();
+        //    address.PhoneBooks.Add(new Entity.PhoneBook() { Type="Mobile"});
+        //    address.PhoneBooks.Add(new Entity.PhoneBook() { Type="Office"});
+
+        //    app.Contacts.Add(new Entity.Contact() {Address = address });
+
+
+        //    return View(app);
+        //}
+
+
+
+        [HttpPost]
+        public ActionResult ApplicationForm(Models.ApplicantBasicViewModel applicantData, string ButtonType)
+        {
+            // return PartialView("Confirmation", app);
+
+            Entity.Applicant currentApplicant = GetApplicant(); 
+
+            if(ButtonType == "Reset")
+            {
+                var NewModel = new Models.ApplicantBasicViewModel();
+                ModelState.Clear();
+                return View(NewModel);
+
+            }
+
+
+
+            if (ButtonType == "Back")
+            {
+                Models.GradeViewModel grade = new Models.GradeViewModel();
+                grade.ID = currentApplicant.grade_applying_id;
+               // grade.Grade = _unitOfWork.Grade_Infos.Find(grade.ID).Grade;
+                return View("GradeSelection", grade);
+            }
+
+
+            if (ButtonType == "Next")
+            {
+                if (ModelState.IsValid)
+                {
+                    currentApplicant.FName = applicantData.FName;  //To-Do use automapper 
+                    currentApplicant.MName = applicantData.MName;
+                    currentApplicant.LName = applicantData.LName;
+                    currentApplicant.DOB = applicantData.DOB;
+                    currentApplicant.Gender = applicantData.Gender;
+
+                    Entity.Address address = new Entity.Address();
+                    address.Email = applicantData.Contact_Email;
+                    address.PhoneBooks.Add(new Entity.PhoneBook() { Type = "Mobile", Phone = applicantData.Contact_MobilePhone });
+                    address.PhoneBooks.Add(new Entity.PhoneBook() { Type = "Office" , Phone = applicantData.Contact_OfficePhone});
+
+                    Entity.Contact contact = new Entity.Contact() { FName = applicantData.Contact_FName, MName = applicantData.Contact_MName, Address = address };
+
+                    currentApplicant.Contacts.Add(contact);
+
+
+
+                  
+
+                    return View("DocumentUpload", GetDocuments());
+                }
+            }
+
+
+            return View(); 
+
+
+        }
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+        [HttpPost]
+        public ActionResult DocumentUpload(string ButtonType)
+        {
+            // return PartialView("Confirmation", app);
+
+            Entity.Applicant currentApplicant = GetApplicant();
+            if (ButtonType == "Back")
+            {
+                Models.ApplicantBasicViewModel applicantViewModel = AutoMapper.Mapper.Map<Entity.Applicant, Models.ApplicantBasicViewModel>(currentApplicant);
+
+                return View("ApplicationForm", applicantViewModel);
+            }
+
+
+            if (ButtonType == "Next")
+            {
+
+                
+
+                return View("Confirmation",currentApplicant);
+                
+            }
+
+
+            return View();
+
+
+        }
+
+
+
+        //[HttpPost]
+        //public async Task<ActionResult> ApplicationForm(Entity.Applicant app)
+        //{
+
+        //    try
+        //    {
+        //        _service.Insert(app);
+        //        await _unitOfWork.SaveAsync();
+
+        //    }
+
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //    }
+
+
+        //        return Json(app.ID, JsonRequestBehavior.AllowGet);
+        //}
+
+
+
+
+
+
+        [HttpPost]
+        public ActionResult Confirmation(Models.FileUploadViewModel files, string ButtonType)
+        {
+            // return PartialView("Confirmation", app);
+
+            Entity.Applicant currentApplicant = GetApplicant();
+            if (ButtonType == "Back")
+            {
+               
+
+                return View("DocumentUpload", GetDocuments());
+
+
+
+            }
+
+
+            if (ButtonType == "Next")
+            {
+                ICollection<Models.FileUploadViewModel> applicantDocuments = GetDocuments();
+             
+
+                //// The files are not actually saved in this demo
+                //file.SaveAs(physicalPath);
+
+
+                
+
+                //TODO save to db 
+                try
+                {
+                    _service.Insert(currentApplicant);
+                    _unitOfWork.Save(); //to get the autogenerated id 
+
+                    foreach (var doc in applicantDocuments)
+                    {
+
+                        if (doc.FileName != null)
+                        {
+
+
+
+                            string physicalPath = Path.Combine(Server.MapPath("~/App_Data"), currentApplicant.ID.ToString());
+
+                            Directory.CreateDirectory(physicalPath);
+
+                            string tempPath = Path.Combine(Server.MapPath("~/App_Data/Temp"), doc.FileName);
+
+                            physicalPath += "\\" + doc.Type + doc.Extention;
+
+                            System.IO.File.Move(tempPath, physicalPath);
+                           
+
+                            currentApplicant.Documents.Add(new Entity.Document() { type = doc.Type, Doc_path = physicalPath, IsVerified = false });
+                        }
+                    }
+
+                    _service.Update(currentApplicant); //to update documet path 
+                    _unitOfWork.Save(); 
+
+
+
+                }
+
+                catch (DbUpdateConcurrencyException)
+                {
+                    //TO-DO catch db eror 
+                }
+                ViewBag.appId = currentApplicant.ID;
+                return View("FinishPage");
+
+            }
+
+
+            return View();
+
+
+        }
+
+
+
+
+
+
+
+        public ActionResult GetApplicants([DataSourceRequest]DataSourceRequest request)
+        {
+        
+
+         var json = JsonConvert.SerializeObject(_service.Queryable().ToDataSourceResult(request), Formatting.Indented,
+                            new JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            });
+
+            return Content(json, "application/json");
+        }
+
+
+
+        public ActionResult SaveFile(HttpPostedFileBase file, string type)
+        {
+            // The Name of the Upload component is "files"
+
+          
+            if (file != null)
+            {
+                 ICollection<Models.FileUploadViewModel> applicantDocuments = GetDocuments();
+
+
+                var doc = applicantDocuments.Where(d => d.Type == type).First(); 
+                
+                 //   doc.file = file;
+                    doc.Extention = Path.GetExtension(file.FileName);
+                    doc.Size = file.ContentLength;
+                    doc.FileName = Path.GetFileName(file.FileName);
+
+                var physicalPath = Path.Combine(Server.MapPath("~/App_Data/Temp"), doc.FileName);
+
+                file.SaveAs(physicalPath);
+
+                //// Some browsers send file names with full path.
+                //// We are only interested in the file name.
+                //var fileName = Path.GetFileName(file.FileName);
+
+
+                //// The files are not actually saved in this demo
+
+
+            }
+
+            // Return an empty string to signify success
+            return Content("");
+        }
+
+        public ActionResult RemoveFile(string fileName)
+        {
+            // The parameter of the Remove action must be called "fileNames"
+           
+            if (fileName != null)
+            {
+                ICollection<Models.FileUploadViewModel> applicantDocuments = GetDocuments();
+
+               
+                   
+                    applicantDocuments.Remove(applicantDocuments.Where(f => f.FileName == Path.GetFileName(fileName)).First());
+                    
+
+                    //var fileName = Path.GetFileName(fullName);
+                    var physicalPath = Path.Combine(Server.MapPath("~/App_Data/Temp"), Path.GetFileName(fileName));
+
+                //// TODO: Verify user permissions
+
+                if (System.IO.File.Exists(physicalPath))
+                {
+                   
+                    System.IO.File.Delete(physicalPath);
+                }
+
+            }
+
+            // Return an empty string to signify success
+            return Content("");
+        }
+
+
+
+
+
+
 
     }
 }

@@ -12,11 +12,11 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class PhoneBook : BaseEntity
+    public partial class PhoneBook : BaseEntity 
     {
+        public Nullable<int> Address_id { get; set; }
         public string Type { get; set; }
         public string Phone { get; set; }
-        public Nullable<int> Address_id { get; set; }
     
         public virtual Address Address { get; set; }
     }

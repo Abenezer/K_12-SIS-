@@ -1,32 +1,44 @@
-﻿@model K_12.Entity.Application
+﻿@model K_12.WEB.Models.ApplicantBasicViewModel
 
 
+<text>
+    <script>
 
+        $(function () {
+            // yay!
+            setProgress(1)
+            
+        });
+      </script>
+ </text>
 
 @using (Ajax.BeginForm(
-    "applicationForm",
-    null,
+                            "ApplicationForm",
+                            null,
 
-    new AjaxOptions()
-    {
-        InsertionMode = InsertionMode.Replace,
-        UpdateTargetId = "appform",
-        OnSuccess = "onSuccess"
+                            new AjaxOptions()
+                            {
 
-
-
-    },
-    new { @class = "form-horizontal" } // htmlAttributes
+                                InsertionMode = InsertionMode.Replace,
+                                UpdateTargetId = "formContent",
+                                //OnSuccess = "onSuccess"
+                                OnComplete = "$('#formContent').hide().fadeIn('slow')"
 
 
-    ))
+
+
+                            },
+                            new { @class = "form-horizontal" } // htmlAttributes
+
+
+                            ))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
 
 
- 
+
 
 
 
@@ -37,29 +49,34 @@
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="student_fname">Student Name</label>
-            <div class="col-md-4">
-                @*<input id="student_fname" name="student_fname" type="text" placeholder="FirstName" class="form-control input-md" value="@Model.FName">*@
-                @Html.TextBoxFor(model => model.FName, new { @class = "form-control input-md", @PlaceHolder = "First Name" })
+            @Html.LabelFor(m => m.FName, "Full Name", new { @class = "col-sm-4 control-label" })
+
+
+            <div class="col-sm-4">
+                @*<span class="k-textbox k-space-right" style="width:100%;">*@
+                @Html.TextBoxFor(model => model.FName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "First Name" })
+                @*<a href="#" class="k-icon k-i-arrow-s">&nbsp;</a>*@
+                @*</span>*@
+                @Html.ValidationMessageFor(model => model.FName)
             </div>
 
-            <div class="col-md-4">
-                @*@Html.EditorFor(m => m.LName, new { htmlAttributes = new { @class = "form-control input-md" } })*@
-                @Html.TextBoxFor(model => model.LName, new { @class = "form-control input-md", @PlaceHolder = "Last Name" })
+
+            <div class="col-sm-4">
+                @Html.TextBoxFor(model => model.MName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Father Name" })
             </div>
         </div>
 
         <!-- Select Basic -->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="student_sex">Gender</label>
-            <div class="col-md-4">
-              
-      @(Html.Kendo().ComboBoxFor(m=> m.Gender)
-          
+            @Html.LabelFor(m => m.Gender, "Gender", new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-4">
+
+                @(Html.Kendo().ComboBoxFor(m => m.Gender)
+
             .Placeholder("Select Gender")
             .DataTextField("Text")
             .DataValueField("Value")
-            
+
           .BindTo(new List<SelectListItem>() {
               new SelectListItem() {
                 Text = "Male", Value = "M"
@@ -69,13 +86,7 @@
               },
 
           })
-
-                    .HtmlAttributes(new { @class = "form-control" })
                 )
-
-
-
-
 
 
             </div>
@@ -83,12 +94,13 @@
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="student_dob">Date of Birth</label>
-            <div class="col-md-4">
-               @* <input id="student_dob" name="student_dob" type="text" placeholder="DD/MM/YY" class="form-control input-md">*@
+            @Html.LabelFor(m => m.DOB, "Birth Date", new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-4">
+                @* <input id="student_dob" name="student_dob" type="text" placeholder="DD/MM/YY" class="form-control input-md">*@
                 @(Html.Kendo().DatePickerFor(m => m.DOB)
+                .Start(CalendarView.Decade)
                     .HtmlAttributes(new { PlaceHolder = "Birth Date" }))
-                    
+
             </div>
         </div>
     </fieldset>
@@ -97,11 +109,71 @@
 
         <!-- Form Name -->
         <legend>Contact Info</legend>
+                @*@Html.EditorFor(model => model.Contacts)*@
 
-      
 
-        @Html.EditorFor(model => model.Contacts)
-     
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Contact_FName, "Full Name", new { @class = "col-sm-4 control-label" })
+
+
+            <div class="col-sm-4">
+                @*<span class="k-textbox k-space-right" style="width:100%;">*@
+                @Html.TextBoxFor(model => model.Contact_FName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "First Name" })
+                @*<a href="#" class="k-icon k-i-arrow-s">&nbsp;</a>*@
+                @*</span>*@
+            </div>
+
+
+            <div class="col-sm-4">
+                @Html.TextBoxFor(model => model.Contact_MName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Last Name" })
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            @Html.LabelFor(m => m.Contact_MobilePhone, "Phone Numbers", new { @class = "col-sm-4 control-label" })
+
+
+            <div class="col-sm-4">
+                <span class="k-textbox k-space-left" style="width:100%;">
+
+                    @(Html.Kendo().MaskedTextBoxFor(model => model.Contact_MobilePhone)
+                .HtmlAttributes(new { @PlaceHolder = "Mobile" })
+                .Mask("9999 00-00-00") )
+                    <span class="k-icon glyphicon-earphone)">&nbsp;</span>
+
+
+                </span>
+            </div>
+
+            <div class="col-sm-4">
+                <span class="k-textbox k-space-left" style="width:100%;">
+
+                    @(Html.Kendo().MaskedTextBoxFor(model => model.Contact_OfficePhone)
+                .HtmlAttributes(new { @PlaceHolder = "Office" })
+                .Mask("9999 00-00-00") )
+                    <span class="k-icon glyphicon-earphone)">&nbsp;</span>
+
+
+                </span>
+            </div>
+
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Contact_Email, "Email", new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-4">
+                @Html.TextBoxFor(model => model.Contact_Email, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Email" })
+
+            </div>
+        </div>
+
+
+
+
+
 
 
     </fieldset>
@@ -109,25 +181,21 @@
 
     <!-- Button (Double) -->
 
+    <div class="row">
 
-        <div class="col-md-8">
-            <button id="bc_btn" name="bc_btn" class="btn btn-primary">Back</button>
-            <button id="reset_btn" name="reset_btn" class="btn btn-danger" type="reset">Reset</button>
-            <button id="nxt_btn" name="nxt_btn" class="btn btn-success" type="submit">Next</button>
+
+        <div class="col-sm-offset-8 col-sm-4 right">
+            @Html.Kendo().Button().Name("BtnPrevious").Content("Back").HtmlAttributes(new { @class = "k-button k-secondary", type="submit", name = "ButtonType", value = "Back" })
+            @Html.Kendo().Button().Name("btnReset").Content("Reset").HtmlAttributes(new { @class = "k-button k-danger", type = "submit", name = "ButtonType", value = "Reset" })
+            @Html.Kendo().Button().Name("BtnNext").Content("Next").HtmlAttributes(new { @class = "k-button k-primary", type="submit", name = "ButtonType", value = "Next" }).Icon("plus")
         </div>
+    </div>
+
 
 
 }
-
-
-<script type="text/javascript">
-
-    var onSuccess = function (result) { window.location.href = "spa#/"; }
-
-</script>
+@*form end*@
 
 
 
 
-
-<h1> XXX HOHOHO</h1>

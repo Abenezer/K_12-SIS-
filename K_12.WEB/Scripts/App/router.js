@@ -1,5 +1,5 @@
 ﻿
-define(['kendo'],
+define(['kendo_mvc'],
     function (kendo) {
         var router = new kendo.Router(),
             layout = new kendo.Layout("<div id='content'></div>");
@@ -24,21 +24,14 @@ define(['kendo'],
             });
         });
 
-        router.route("/application/", function () {
+        router.route("/application", function () {
             require(['text!/application/index'], function (view) {
                 loadView(null, view);
             });
         });
         
 
-            router.route("/application/applicationForm", function () {
-                require(['text!/application/applicationForm'], function (view) {
-                loadView(null, view);
-            });
-
-
-        });
-
+          
         
 
         var loadView = function (viewModel, view, delegate) {

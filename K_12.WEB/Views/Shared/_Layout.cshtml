@@ -11,7 +11,7 @@
 	<link href="@Url.Content("~/Content/kendo/2015.3.1111/kendo.dataviz.bootstrap.min.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Content/kendo/2015.3.1111/kendo.common-bootstrap.min.css")" rel="stylesheet" type="text/css" />
 	<script src="@Url.Content("~/Scripts/kendo/2015.3.1111/jszip.min.js")"></script>
-    
+ 
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -28,7 +28,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="#/">Home</a></li>
                     <li><a href="#/home/about">About</a></li>
-                    <li><a href="#/application/applicationForm">Application</a></li>
+                    <li><a href="#/application">Application</a></li>
                     <li><a href="#/home/contact">Contact</a></li>
                     <li><a href="#/customer/index">Customer</a></li>
                 </ul>
@@ -47,10 +47,9 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
-   
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", false)
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
    
 </body>
 </html>

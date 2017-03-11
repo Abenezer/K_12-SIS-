@@ -7,6 +7,8 @@ namespace K_12.WEB.Models
 {
     public class GradeViewModel
     {
-        public int Grade { get; set; }
+        public Nullable<int> ID { get; set; }
+        public String Grade { get; set; }
+
     }
 }

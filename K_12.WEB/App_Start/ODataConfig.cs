@@ -1,5 +1,7 @@
 ﻿
 
+
+
 using System.Web.Http;
 using System.Web.Http.OData.Builder;
 
@@ -16,7 +18,11 @@ namespace K_12.WEB
 
             builder.EntitySet<Entity.Address>("Address");
             builder.EntitySet<Entity.Contact>("Contact");
-            builder.EntitySet<Entity.Application>("Application");
+            builder.EntitySet<Entity.PhoneBook>("PhoneBook");
+            builder.EntitySet<Entity.Document>("Document");
+            builder.EntitySet<Entity.Applicant>("Application");
+            builder.EntitySet<Entity.Grade_Info>("GradeInfo");
+
             //builder.EntitySet<Entities.Models.Customer>(typeof(Entities.Models.Customer).Name);
             //builder.EntitySet<Entities.Models.Order>(typeof(Entities.Models.Order).Name);
 
@@ -51,6 +57,8 @@ namespace K_12.WEB
             config.Routes.MapODataRoute("odata", "odata", model);
 
             config.EnableQuerySupport();
+            config.MapHttpAttributeRoutes();
+            
 
 
         }

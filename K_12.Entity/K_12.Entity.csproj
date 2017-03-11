@@ -52,7 +52,7 @@
     <Compile Include="Address.cs">
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Application.cs">
+    <Compile Include="Applicant.cs">
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="BaseEntity.cs">
@@ -70,6 +70,9 @@
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Grade_Info.cs">
+      <DependentUpon>Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Person.cs">
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="PhoneBook.cs">

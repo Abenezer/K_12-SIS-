@@ -44,12 +44,18 @@ namespace K_12.WEB
                .RegisterType<IUnitOfWork, UnitOfWork>(new PerRequestLifetimeManager())
                .RegisterType<IAddressRepository, AddressRepository>()
                .RegisterType<IContactRepository, ContactRepository>()
-               .RegisterType<IApplicationRepository, ApplicationRepository>()
+               .RegisterType<IApplicantRepository, ApplicantRepository>()
+                  .RegisterType<IDocumentRepository, DocumentRepository>()
+                     .RegisterType<IPhonebookRepository, PhonebookRepository>()
+                         .RegisterType<IGradeInfoRepository, GradeInfoRepository>()
 
                //.RegisterType<IRepositoryAsync<Product>, Repository<Product>>()
                .RegisterType<IAddressService, AddressService>()
                .RegisterType<IContactService, ContactService>()
-                .RegisterType<IApplicationService, ApplicationService>()
+                .RegisterType<IApplicantService, ApplicantService>()
+                .RegisterType<IDocumentService, DocumentService>()
+                .RegisterType<IPhonebookService, PhonebookService>()
+                  .RegisterType<IGradeInfoService, GradeInfoService>()
 
                ;
 

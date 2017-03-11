@@ -1,7 +1,23 @@
 ﻿@model K_12.Entity.PhoneBook
 
-@(Html.Kendo().MaskedTextBoxFor(model => model.Phone)
-    .HtmlAttributes(new { @class = "form-control"})
-.Mask("(999) 000-0000")
 
-)
+
+
+
+    <div class="col-sm-4">
+        <span class="k-textbox k-space-left" style="width:100%;">
+
+            @(Html.Kendo().MaskedTextBoxFor(model => model.Phone)
+                .HtmlAttributes(new { @PlaceHolder = Model.Type })
+                .Mask("9999 00-00-00") )
+
+           
+            <span class="k-icon @(Model.Type=="Mobile" ? "k-i-search":"glyphicon-earphone")">&nbsp;</span>
+           
+               
+                
+            
+
+           
+            </span>
+</div>

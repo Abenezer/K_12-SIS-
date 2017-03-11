@@ -8,13 +8,16 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.OData;
 using System.Data.Entity.Infrastructure;
+using System.Web.Http.OData.Routing;
+using System.Web.Http.OData.Extensions;
+using Microsoft.Data.Edm;
 
 namespace K_12.WEB.Api
 {
     public class Controller<TEntity> : ODataController where TEntity : BaseEntity
     {
         protected readonly IService<TEntity> _service;
-        private readonly IUnitOfWork _unitOfWork;
+        protected readonly IUnitOfWork _unitOfWork;
 
         public Controller(
             IUnitOfWork unitOfWork,
@@ -23,6 +26,7 @@ namespace K_12.WEB.Api
             _unitOfWork = unitOfWork;
             _service = service;
         }
+
 
 
         // GET: odata/Address
@@ -76,6 +80,13 @@ namespace K_12.WEB.Api
 
             return Updated(entity);
         }
+
+
+
+
+
+
+
 
 
         protected override void Dispose(bool disposing)

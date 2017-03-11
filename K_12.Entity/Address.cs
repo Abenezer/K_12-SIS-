@@ -12,7 +12,7 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Address : BaseEntity
+    public partial class Address : BaseEntity 
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Address()

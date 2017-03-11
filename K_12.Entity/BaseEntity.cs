@@ -12,7 +12,7 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public abstract partial class BaseEntity
+    public abstract partial class BaseEntity 
     {
         public int ID { get; set; }
     }

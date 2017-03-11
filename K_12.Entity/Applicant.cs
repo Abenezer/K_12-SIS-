@@ -12,27 +12,24 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Application : BaseEntity
+    public partial class Applicant : Person 
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Application()
+        public Applicant()
         {
             this.Documents = new HashSet<Document>();
             this.Contacts = new HashSet<Contact>();
         }
     
-        public string FName { get; set; }
-        public string MName { get; set; }
-        public string LName { get; set; }
         public Nullable<System.DateTime> DOB { get; set; }
-        public string status { get; set; }
-        public string grade_applying { get; set; }
+        public string app_status { get; set; }
         public string photo_path { get; set; }
-        public string Gender { get; set; }
+        public Nullable<int> grade_applying_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Document> Documents { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Contact> Contacts { get; set; }
+        public virtual Grade_Info Grade_Info { get; set; }
     }
 }

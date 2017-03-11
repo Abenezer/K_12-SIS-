@@ -1,0 +1,101 @@
+﻿@model IEnumerable<K_12.WEB.Models.FileUploadViewModel>
+<text>
+    <script type="text/javascript">
+        $(function () {
+            // yay!
+            setProgress(2)
+
+        });
+
+        function uploadSuccess(e)
+        {
+            //to-do display check right
+
+        }
+       
+
+    </script>
+
+</text>
+
+
+@using (Ajax.BeginForm(
+                                        "DocumentUpload",
+                                        null,
+
+                                        new AjaxOptions()
+                                        {
+                                           
+                                            InsertionMode = InsertionMode.Replace,
+                                            UpdateTargetId = "formContent",
+                                            //OnSuccess = "onSuccess"
+                                             OnComplete = "$('#formContent').hide().fadeIn('slow')"
+
+
+
+                                        },
+                                        new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                        ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+
+
+    foreach (var f in Model)
+    {
+
+<h3>@f.Type</h3>
+
+    <div style="width:45%">
+    <div class="demo-section">
+        @(Html.Kendo().Upload()
+                .Name(f.Type + "File")
+                .Async(a => a
+                    .Save("SaveFile", "Application", new { type = @f.Type })
+                    .Remove("RemoveFile", "Application")
+                    .AutoUpload(true)
+                    .SaveField("file")
+
+                )
+            .Files(  file =>
+            {
+
+                if (f.file != null) file.Add().Name(f.FileName).Extension(f.Extention).Size(f.Size);
+
+            }
+            )
+            .Multiple(false)
+            .Events(e=>e.Success("uploadSuccess"))
+
+        )
+    </div>
+</div>
+    
+
+    }
+
+
+    
+
+
+
+
+
+
+<!-- Button (Double) -->
+
+<div class="row">
+
+    <div class="col-sm-offset-8 col-sm-4 right">
+        @Html.Kendo().Button().Name("BtnPrevious").Content("Back").HtmlAttributes(new { @class = "k-button k-secondary", type = "submit", name = "ButtonType", value = "Back" })
+        @Html.Kendo().Button().Name("btnReset").Content("Reset").HtmlAttributes(new { @class = "k-button k-danger", type = "reset" })
+        @Html.Kendo().Button().Name("BtnNext").Content("Next").HtmlAttributes(new { @class = "k-button k-primary", type = "submit", name = "ButtonType", value = "Next" }).Icon("plus")
+    </div>
+</div>
+
+
+}

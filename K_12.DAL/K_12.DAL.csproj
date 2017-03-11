@@ -54,7 +54,7 @@
     <Compile Include="Code Generation\AddressRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="Code Generation\ApplicationRepository.cs">
+    <Compile Include="Code Generation\ApplicantRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="Code Generation\ContactRepository.cs">
@@ -69,7 +69,7 @@
     <Compile Include="Code Generation\IAddressRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="Code Generation\IApplicationRepository.cs">
+    <Compile Include="Code Generation\IApplicantRepository.cs">
       <DependentUpon>RepositoryGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="Code Generation\IContactRepository.cs">
