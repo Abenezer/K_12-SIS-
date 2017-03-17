@@ -1,0 +1,60 @@
+﻿@model K_12.Entity.Student 
+
+
+
+<text>
+    <script>
+
+        $(function () {
+            // yay!
+            setProgress(4)
+
+        });
+    </script>
+</text>
+
+@using (Ajax.BeginForm(
+                                                                "Confirmation",
+                                                                null,
+
+                                                                new AjaxOptions()
+                                                                {
+
+                                                                    InsertionMode = InsertionMode.Replace,
+                                                                    UpdateTargetId = "admissionFormContent",
+                                                                    //OnSuccess = "onSuccess",
+                                                                    OnSuccess = "$('#admissionFormContent').hide().fadeIn('slow');"
+
+
+                                                                },
+                                                                new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                                                ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+
+
+
+
+
+
+    <h3> @Model.FName @Model.MName @Model.LName</h3>
+
+    @(Model.Gender == "M" ? "Male" : "Female'")   @(DateTime.Today.Year - Model.DOB.Value.Year) <text>Years Old</text>
+
+
+
+
+    <div class="row">
+
+        <div class="col-sm-offset-8 col-sm-4 right">
+            @Html.Kendo().Button().Name("BtnPrevious").Content("Back").HtmlAttributes(new { @class = "k-button k-secondary", type = "submit", name = "ButtonType", value = "Back" })
+            @Html.Kendo().Button().Name("BtnNext").Content("Confirm").HtmlAttributes(new { @class = "k-button k-primary", type = "submit", name = "ButtonType", value = "Next" }).Icon("plus")
+        </div>
+    </div>
+
+} 

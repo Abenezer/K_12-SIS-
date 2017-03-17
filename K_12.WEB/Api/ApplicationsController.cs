@@ -8,9 +8,9 @@ using System.Web.Http;
 
 namespace K_12.WEB.Api
 {
-    public class ApplicationController : Controller<Entity.Applicant>
+    public class ApplicationsController : Controller<Entity.Applicant>
     {
-        public ApplicationController(IUnitOfWork unitOfWork, IApplicantService service) : base(unitOfWork, service)
+        public ApplicationsController(IUnitOfWork unitOfWork, IApplicantService service) : base(unitOfWork, service)
         {
         }
 

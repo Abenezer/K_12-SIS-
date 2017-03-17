@@ -7,9 +7,9 @@ using K_12.Entity;
 
 namespace K_12.WEB.Api
 {
-    public class PhoneBookController : Controller<Entity.PhoneBook>
+    public class PhoneBooksController : Controller<Entity.PhoneBook>
     {
-        public PhoneBookController(IUnitOfWork unitOfWork, IPhonebookService service) : base(unitOfWork, service)
+        public PhoneBooksController(IUnitOfWork unitOfWork, IPhonebookService service) : base(unitOfWork, service)
         {
         }
     }

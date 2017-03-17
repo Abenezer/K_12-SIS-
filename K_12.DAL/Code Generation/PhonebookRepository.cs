@@ -1,5 +1,4 @@
-
-    
+                
 using K_12.Entity;
               
 public class PhonebookRepository : Repository<PhoneBook>, IPhonebookRepository

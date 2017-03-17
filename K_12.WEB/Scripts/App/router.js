@@ -29,6 +29,12 @@ define(['kendo_mvc'],
                 loadView(null, view);
             });
         });
+
+        router.route("/admission", function () {
+            require(['text!/admission/index'], function (view) {
+                loadView(null, view);
+            });
+        });
         
 
           

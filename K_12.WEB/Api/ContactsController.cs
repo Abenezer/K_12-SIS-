@@ -11,10 +11,15 @@ using System.Data.Entity.Infrastructure;
 
 namespace K_12.WEB.Api
 {
-    public class AddressController : Controller<Address>
+    public class ContactsController : Controller<Entity.Contact>
     {
-        public AddressController(IUnitOfWork unitOfWork, IAddressService service) : base(unitOfWork, service)
+        public ContactsController(IUnitOfWork unitOfWork, IContactService service) : base(unitOfWork, service)
         {
         }
+
+
+
     }
+
+
 }

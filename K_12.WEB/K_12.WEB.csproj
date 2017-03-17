@@ -48,6 +48,10 @@
       <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="BeginCollectionItem, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BeginCollectionItem.1.2.1.0\lib\net35\BeginCollectionItem.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -199,13 +203,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\AddressController.cs" />
-    <Compile Include="Api\ApplicationController.cs" />
-    <Compile Include="Api\ContactController.cs" />
+    <Compile Include="Api\AddressesController.cs" />
+    <Compile Include="Api\ApplicationsController.cs" />
+    <Compile Include="Api\ContactsController.cs" />
     <Compile Include="Api\Controller.cs" />
-    <Compile Include="Api\DocumentController.cs" />
-    <Compile Include="Api\GradeInfoController.cs" />
-    <Compile Include="Api\PhoneBookController.cs" />
+    <Compile Include="Api\DocumentsController.cs" />
+    <Compile Include="Api\GradeInfosController.cs" />
+    <Compile Include="Api\PhoneBooksController.cs" />
     <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -215,6 +219,7 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdmissionController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SPAController.cs" />
@@ -222,9 +227,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Admission\MedicationViewModel.cs" />
+    <Compile Include="Models\Admission\StudentExtraInfoViewModel.cs" />
+    <Compile Include="Models\Admission\StudentInfoViewModel.cs" />
     <Compile Include="Models\ApplicantBasicViewModel.cs" />
     <Compile Include="Models\FileUploadViewModel.cs" />
     <Compile Include="Models\GradeViewModel.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -913,6 +922,13 @@
     <Content Include="Views\Application\DocumentUpload.cshtml" />
     <Content Include="Views\Application\FinishPage.cshtml" />
     <Content Include="Views\Application\GradeSelection.cshtml" />
+    <Content Include="Views\Admission\Index.cshtml" />
+    <Content Include="Views\Admission\StudentInfo.cshtml" />
+    <Content Include="Views\Admission\ParentInfo.cshtml" />
+    <Content Include="Views\Admission\StudentExtraInfo.cshtml" />
+    <Content Include="Views\Admission\Confirmation.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MedicationAdmission.cshtml" />
+    <Content Include="Views\Admission\UserRegistration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Temp\" />

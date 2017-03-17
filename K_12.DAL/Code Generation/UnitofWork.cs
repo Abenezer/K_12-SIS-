@@ -1,7 +1,5 @@
 using System;
 using K_12.Entity;
-using System.Data.Entity.Validation;
-using System.Linq;
 
 public class UnitOfWork : IUnitOfWork
 {
@@ -18,16 +16,41 @@ public class UnitOfWork : IUnitOfWork
 		//_context = new K_12Entities();
 	//}
 	
+    public ISchoolRepository Schools
+    {
+        get { return new SchoolRepository(_context); }
+    }
+
+    public IStudentParentRepository student_parents
+    {
+        get { return new StudentParentRepository(_context); }
+    }
+
+    public IMedicationRepository Medications
+    {
+        get { return new MedicationRepository(_context); }
+    }
+
+    public IApplicantRepository Applicants
+    {
+        get { return new ApplicantRepository(_context); }
+    }
+
+
+    public IApplicationRepository Applications
+    {
+        get { return new ApplicationRepository(_context); }
+    }
+
+
+    public IParentRepository Parents
+    {
+        get { return new ParentRepository(_context); }
+    }
+
     public IPhonebookRepository PhoneBooks
     {
         get { return new PhonebookRepository(_context); }
-    }
-
- 
-
-    public IGradeInfoRepository Grade_Infos
-    {
-        get { return new GradeInfoRepository(_context); }
     }
 
     public IDocumentRepository Documents
@@ -35,15 +58,9 @@ public class UnitOfWork : IUnitOfWork
         get { return new DocumentRepository(_context); }
     }
 
-    public IContactRepository Contacts
+    public IStudentMedicationRepository student_medications
     {
-        get { return new ContactRepository(_context); }
-    }
-
-
-    public IApplicantRepository Applicants
-    {
-        get { return new ApplicantRepository(_context); }
+        get { return new StudentMedicationRepository(_context); }
     }
 
     public IAddressRepository Addresss
@@ -51,35 +68,30 @@ public class UnitOfWork : IUnitOfWork
         get { return new AddressRepository(_context); }
     }
 
+    public ILanguageRepository Languages
+    {
+        get { return new LanguageRepository(_context); }
+    }
+
+    public IStudentRepository Students
+    {
+        get { return new StudentRepository(_context); }
+    }
+
+    public IContactRepository Contacts
+    {
+        get { return new ContactRepository(_context); }
+    }
+
+    public IGradeInfoRepository Grade_Infos
+    {
+        get { return new GradeInfoRepository(_context); }
+    }
+
     
     public void Save()
     {
-        //_context.SaveChanges();
-
-        try
-        {
-          _context.SaveChanges();
-        }
-        catch (DbEntityValidationException ex)
-        {
-            // Retrieve the error messages as a list of strings.
-            var errorMessages = ex.EntityValidationErrors
-                    .SelectMany(x => x.ValidationErrors)
-                    .Select(x => x.ErrorMessage);
-
-            // Join the list to a single string.
-            var fullErrorMessage = string.Join("; ", errorMessages);
-
-            // Combine the original exception message with the new one.
-            var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-
-            // Throw a new DbEntityValidationException with the improved exception message.
-            throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
-        }
-
-
-
-
+        _context.SaveChanges();
     }
 
 	 public System.Threading.Tasks.Task<int> SaveAsync()

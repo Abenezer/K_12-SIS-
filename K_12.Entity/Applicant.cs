@@ -17,19 +17,17 @@ namespace K_12.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Applicant()
         {
-            this.Documents = new HashSet<Document>();
             this.Contacts = new HashSet<Contact>();
+            this.Applications = new HashSet<Application>();
         }
     
         public Nullable<System.DateTime> DOB { get; set; }
-        public string app_status { get; set; }
         public string photo_path { get; set; }
-        public Nullable<int> grade_applying_id { get; set; }
+        public string Nationality { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Document> Documents { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Contact> Contacts { get; set; }
-        public virtual Grade_Info Grade_Info { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Application> Applications { get; set; }
     }
 }

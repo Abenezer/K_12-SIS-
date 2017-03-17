@@ -20,7 +20,9 @@ namespace K_12.WEB.App_Start
                     .ForMember(dest => dest.Contact_MobilePhone, opt => opt.MapFrom(src => (src.Contacts.Count == 0) ? null : src.Contacts.First().Address.PhoneBooks.Where(p => p.Type == "Mobile").First().Phone))
                     .ForMember(dest => dest.Contact_OfficePhone, opt => opt.MapFrom(src => (src.Contacts.Count == 0) ? null : src.Contacts.First().Address.PhoneBooks.Where(p => p.Type == "Office").First().Phone));
 
+                cfg.CreateMap<Entity.Student, Models.Admission.StudentInfoViewModel>().ReverseMap();
 
+             
 
 
             });

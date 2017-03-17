@@ -16,12 +16,20 @@ namespace K_12.WEB
         {
             ODataModelBuilder builder = new ODataConventionModelBuilder();
 
-            builder.EntitySet<Entity.Address>("Address");
-            builder.EntitySet<Entity.Contact>("Contact");
-            builder.EntitySet<Entity.PhoneBook>("PhoneBook");
-            builder.EntitySet<Entity.Document>("Document");
-            builder.EntitySet<Entity.Applicant>("Application");
-            builder.EntitySet<Entity.Grade_Info>("GradeInfo");
+            builder.EntitySet<Entity.Address>("Addresses");
+            builder.EntitySet<Entity.Contact>("Contacts");
+            builder.EntitySet<Entity.PhoneBook>("PhoneBooks");
+            builder.EntitySet<Entity.Document>("Documents");
+            builder.EntitySet<Entity.Applicant>("Applications");
+            builder.EntitySet<Entity.Grade_Info>("GradeInfos");
+            builder.EntitySet<Entity.School>("Schools");
+            builder.EntitySet<Entity.Parent>("Parents");
+            builder.EntitySet<Entity.Student>("Students");
+
+            builder.EntitySet<Entity.student_medication>("StudentMedication");
+            builder.EntitySet<Entity.student_parent>("StudentParent");
+
+
 
             //builder.EntitySet<Entities.Models.Customer>(typeof(Entities.Models.Customer).Name);
             //builder.EntitySet<Entities.Models.Order>(typeof(Entities.Models.Order).Name);

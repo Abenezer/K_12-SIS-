@@ -48,6 +48,10 @@ namespace K_12.WEB
                   .RegisterType<IDocumentRepository, DocumentRepository>()
                      .RegisterType<IPhonebookRepository, PhonebookRepository>()
                          .RegisterType<IGradeInfoRepository, GradeInfoRepository>()
+                         .RegisterType<IParentRepository, ParentRepository>()
+                         .RegisterType<IStudentRepository, StudentRepository>()
+
+
 
                //.RegisterType<IRepositoryAsync<Product>, Repository<Product>>()
                .RegisterType<IAddressService, AddressService>()
@@ -56,6 +60,13 @@ namespace K_12.WEB
                 .RegisterType<IDocumentService, DocumentService>()
                 .RegisterType<IPhonebookService, PhonebookService>()
                   .RegisterType<IGradeInfoService, GradeInfoService>()
+
+                  .RegisterType<IStudentService, StudentService>()
+                   .RegisterType<IParentService, ParentService>()
+                     .RegisterType<IAdmissionService, AdmissionService>()
+
+
+
 
                ;
 

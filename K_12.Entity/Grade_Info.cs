@@ -14,11 +14,20 @@ namespace K_12.Entity
     
     public partial class Grade_Info : BaseEntity 
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Grade_Info()
+        {
+            this.Applications = new HashSet<Application>();
+        }
+    
         public string Grade { get; set; }
         public Nullable<int> Fee { get; set; }
         public string Curriculum { get; set; }
         public string Other_info { get; set; }
         public Nullable<int> Capacity { get; set; }
         public Nullable<int> Current_students { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Application> Applications { get; set; }
     }
 }

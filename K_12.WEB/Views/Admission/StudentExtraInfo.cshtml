@@ -1,0 +1,167 @@
+﻿@model K_12.WEB.Models.Admission.StudentExtraInfoViewModel
+
+
+<text>
+    <script>
+
+        $(function () {
+            // yay!
+            setProgress(2)
+
+        });
+    </script>
+</text>
+
+@using (Ajax.BeginForm(
+                                                                "StudentExtraInfo",
+                                                                null,
+
+                                                                new AjaxOptions()
+                                                                {
+
+                                                                    InsertionMode = InsertionMode.Replace,
+                                                                    UpdateTargetId = "admissionFormContent",
+                                                                    //OnSuccess = "onSuccess"
+                                                                    OnSuccess = "$('#admissionFormContent').hide().fadeIn('slow')"
+
+
+
+
+                                                                },
+                                                                new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                                                ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+
+
+
+
+
+    <fieldset class="col-md-12">
+
+        <!-- Form Name -->
+        <legend>Previous School </legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            
+            <div class="col-sm-4">
+                @(Html.Kendo().ComboBoxFor(m => m.PrevSchoolId)
+        .Placeholder("Previous School")
+        .DataTextField("Name")
+        .DataValueField("ID")
+        .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetSchools", "admission"))
+                     )
+       
+                )
+
+
+
+
+            </div>
+
+
+            
+        </div>
+
+        </fieldset> 
+
+        <fieldset class="col-md-6">
+            <legend>Medication Info</legend>
+        <!-- Select Basic -->
+        <div class="form-group">
+           
+            <div class="col-sm-8">
+            
+                @(Html.CheckBoxFor(m=>m.isOnMedication)) 
+                <span>isOnMedication</span>
+
+            </div>
+        </div>
+
+            <div id="medicationList">
+
+                @for (int i = 0; i < Model.MedicationsList.Count; i++)
+                {
+                    @Html.EditorFor(m => m.MedicationsList[i], "MedicationAdmission")
+                }
+
+            </div>
+
+    </fieldset>
+
+
+
+    <fieldset class="col-md-6">
+
+        <legend>Home Spoken Langues</legend>
+
+        <div class="form-group">
+               <div class="col-sm-8">
+
+                @(Html.Kendo().MultiSelectFor(m=>m.Languages)
+          .DataTextField("Name")
+          .DataValueField("ID")
+          .Placeholder("Select languages...")
+          .DataSource(source =>
+          {
+              source.Read(read =>
+              {
+                  read.Action("GetLanguages", "admission");
+              })
+             .ServerFiltering(false);
+          })
+                )
+
+                   </div>
+            </div>
+
+    </fieldset>
+
+
+    <fieldset class="col-md-12">
+
+        <!-- Form Name -->
+        <legend>Additional Contacts</legend>
+        @*@Html.EditorFor(model => model.Contacts)*@
+
+
+
+            @Html.EditorFor(m=>m.Contacts)
+
+
+
+
+    </fieldset>
+
+
+
+
+
+
+        <!-- Button(Double) -->
+
+        <div class="row">
+
+
+            <div class="col-sm-offset-8 col-sm-4 right">
+                @Html.Kendo().Button().Name("BtnPrevious").Content("Back").HtmlAttributes(new { @class = "k-button k-secondary", type = "submit", name = "ButtonType", value = "Back" })
+                @Html.Kendo().Button().Name("btnReset").Content("Reset").HtmlAttributes(new { @class = "k-button k-danger", type = "submit", name = "ButtonType", value = "Reset" })
+                @Html.Kendo().Button().Name("BtnNext").Content("Next").HtmlAttributes(new { @class = "k-button k-primary", type = "submit", name = "ButtonType", value = "Next" }).Icon("plus")
+            </div>
+        </div>
+
+
+
+}
+@*form end*@
+
+
+
+

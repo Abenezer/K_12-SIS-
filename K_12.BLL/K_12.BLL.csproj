@@ -51,7 +51,11 @@
     <Compile Include="Service\AddressService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\AdmissionService.cs" />
     <Compile Include="Service\ApplicantService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ApplicationService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\ContactService.cs">
@@ -60,13 +64,36 @@
     <Compile Include="Service\DocumentService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\EntityServices.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
     <Compile Include="Service\GradeInfoService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\MedicationService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ParentService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\PhonebookService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\SchoolService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
     <Compile Include="Service\Service.cs" />
+    <Compile Include="Service\StudentMedicationService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\StudentParentService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\StudentService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\K_12.DAL\K_12.DAL.csproj">

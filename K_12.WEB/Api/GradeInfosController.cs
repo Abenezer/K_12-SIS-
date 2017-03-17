@@ -7,9 +7,9 @@ using K_12.Entity;
 
 namespace K_12.WEB.Api
 {
-    public class GradeInfoController : Controller<Entity.Grade_Info>
+    public class GradeInfosController : Controller<Entity.Grade_Info>
     {
-        public GradeInfoController(IUnitOfWork unitOfWork, IGradeInfoService service) : base(unitOfWork, service)
+        public GradeInfosController(IUnitOfWork unitOfWork, IGradeInfoService service) : base(unitOfWork, service)
         {
         }
     }

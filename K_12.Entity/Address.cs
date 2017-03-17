@@ -23,6 +23,9 @@ namespace K_12.Entity
         public string Subcity { get; set; }
         public Nullable<int> Woreda { get; set; }
         public string Email { get; set; }
+        public string Type { get; set; }
+        public string H_NO { get; set; }
+        public string Address_Detail { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhoneBook> PhoneBooks { get; set; }

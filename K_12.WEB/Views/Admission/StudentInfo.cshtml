@@ -1,0 +1,239 @@
+﻿@model K_12.WEB.Models.Admission.StudentInfoViewModel 
+
+
+<text>
+    <script>
+
+        $(function () {
+            // yay!
+            setProgress(0)
+
+        });
+    </script>
+</text>
+
+@using (Ajax.BeginForm(
+                                        "StudentInfo",
+                                        null,
+
+                                        new AjaxOptions()
+                                        {
+
+                                            InsertionMode = InsertionMode.Replace,
+                                            UpdateTargetId = "admissionFormContent",
+                                            //OnSuccess = "onSuccess"
+                                            OnSuccess = "$('#admissionFormContent').hide().fadeIn('slow')"
+
+
+
+
+                                        },
+                                        new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                        ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+
+
+
+
+
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Student Info</legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <div class="col-sm-3">
+                @Html.LabelFor(m => m.FName, "Full Name", new { @class = "col-sm-4 control-label", style = "width:100%;" })
+            </div>
+
+
+            <div class="col-sm-3">
+                @*<span class="k-textbox k-space-right" style="width:100%;">*@
+                @Html.TextBoxFor(model => model.FName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "First Name" })
+                @*<a href="#" class="k-icon k-i-arrow-s">&nbsp;</a>*@
+                @*</span>*@
+              <span class="has-error">  @Html.ValidationMessageFor(model => model.FName) </span>
+            </div>
+
+
+            <div class="col-sm-3">
+                @Html.TextBoxFor(model => model.MName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Father Name" })
+            </div>
+
+            <div class="col-sm-3">
+                @Html.TextBoxFor(model => model.LName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "G.Father Name" })
+            </div>
+        </div>
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <div class="col-sm-3">
+                @Html.LabelFor(m => m.Gender, "Gender", new { @class = "col-sm-4 control-label", style = "width:100%;" })
+            </div>
+            <div class="col-sm-3">
+
+                @(Html.Kendo().ComboBoxFor(m => m.Gender)
+
+            .Placeholder("Select Gender")
+            .DataTextField("Text")
+            .DataValueField("Value")
+
+          .BindTo(new List<SelectListItem>() {
+              new SelectListItem() {
+                Text = "Male", Value = "M"
+              },
+              new SelectListItem() {
+                Text = "Female", Value = "F"
+              },
+
+          })
+                )
+
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <div class="col-sm-3">
+                @Html.LabelFor(m => m.DOB, "Birth Date", new { @class = "col-sm-4 control-label", style = "width:100%;" })
+            </div>
+            <div class="col-sm-3">
+                @* <input id="student_dob" name="student_dob" type="text" placeholder="DD/MM/YY" class="form-control input-md">*@
+                @(Html.Kendo().DatePickerFor(m => m.DOB)
+                .Start(CalendarView.Decade)
+                    .HtmlAttributes(new { PlaceHolder = "Birth Date" }))
+
+            </div>
+        </div>
+    </fieldset>
+
+
+    <fieldset>
+
+     
+        <legend>Country and Nationality</legend>
+
+     
+        <div class="form-group">
+
+            <div class="col-sm-4">
+                @(Html.Kendo().AutoComplete()
+                    .Name("aada")
+                    .Filter("startswith")
+                    .Placeholder("Select country...")
+                    .BindTo(new string[] {
+                "Albania",
+                "Andorra",
+                "Armenia",
+                "Austria",
+                "Azerbaijan",
+                "Belarus",
+                "Belgium",
+                "Bosnia & Herzegovina",
+                "Bulgaria",
+                "Croatia",
+                "Cyprus",
+                "Czech Republic",
+                "Denmark",
+                "Estonia",
+                "Ethiopia",
+                "Finland",
+                "France",
+                "Georgia",
+                "Germany",
+                "Greece",
+                "Hungary",
+                "Iceland",
+                "Ireland",
+                "Italy",
+                "Kosovo",
+                "Latvia",
+                "Liechtenstein",
+                "Lithuania",
+                "Luxembourg",
+                "Macedonia",
+                "Malta",
+                "Moldova",
+                "Monaco",
+                "Montenegro",
+                "Netherlands",
+                "Norway",
+                "Poland",
+                "Portugal",
+                "Romania",
+                "Russia",
+                "San Marino",
+                "Serbia",
+                "Slovakia",
+                "Slovenia",
+                "Spain",
+                "Sweden",
+                "Switzerland",
+                "Turkey",
+                "Ukraine",
+                "United Kingdom",
+                "Vatican City"
+          })
+
+                    )
+             </div>
+
+
+            <div class="col-sm-4">
+                @(Html.Kendo().AutoCompleteFor(m => m.POB_City)
+                    .Filter("startswith")
+                    .Placeholder("Select City...")
+                    .BindTo(new string[] {
+                "Addis Ababa",
+                "Mekele",
+                "Nirobi"                
+             })
+                )
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Nationality, "Nationality", new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-4">
+            @(Html.Kendo().AutoCompleteFor(m => m.POB_City)
+                    .Filter("startswith")
+                    .Placeholder("Select City...")
+                    .BindTo(new string[] {
+                "Ethiopian",
+                "Somalian",
+                "Kenyan"
+             })
+            )
+            </div>
+
+        </div>
+    </fieldset>
+
+<!-- Button(Double) -->
+
+    <div class="row">
+
+
+        <div class="col-sm-offset-8 col-sm-4 right">
+            @Html.Kendo().Button().Name("btnReset").Content("Reset").HtmlAttributes(new { @class = "k-button k-danger", type = "submit", name = "ButtonType", value = "Reset" })
+            @Html.Kendo().Button().Name("BtnNext").Content("Next").HtmlAttributes(new { @class = "k-button k-primary", type = "submit", name = "ButtonType", value = "Next" }).Icon("plus")
+        </div>
+    </div>
+
+
+
+}
+    @*form end*@
+
+
+
+

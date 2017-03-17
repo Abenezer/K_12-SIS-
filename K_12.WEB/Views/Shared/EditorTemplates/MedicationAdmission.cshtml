@@ -1,0 +1,28 @@
+﻿@model K_12.Entity.student_medication
+
+
+        <div class="form-group">
+
+            <div class="col-sm-8">
+                @(Html.Kendo().ComboBoxFor(m => m.medication_id)
+        .Placeholder("Medication Name")
+        .DataTextField("Name")
+        .DataValueField("ID")
+        .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetMedications", "admission"))
+                     ))
+            </div>
+
+        </div>
+        
+
+
+        <div class="form-group">
+
+            <div class="col-sm-8">
+
+                @Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Remark" })
+
+
+            </div>
+        </div>
