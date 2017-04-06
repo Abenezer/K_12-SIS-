@@ -7,10 +7,11 @@ using K_12.Entity;
 public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
     private readonly DbSet<TEntity> _entities;
-
+    private K_12Entities _context;
     protected Repository(K_12Entities context)
     {
         _entities = context.Set<TEntity>();
+        _context = context;
     }
 
     public IEnumerable<TEntity> GetAll()
@@ -55,7 +56,9 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     {
         //entity.ObjectState = ObjectState.Modified;
         _entities.Attach(entity);
-       // _context.SyncObjectState(entity);
+        _context.Entry(entity).State = EntityState.Modified;
     }
+
+
 }
 

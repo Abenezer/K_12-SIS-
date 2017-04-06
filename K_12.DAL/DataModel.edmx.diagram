@@ -49,13 +49,32 @@
         <AssociationConnector Association="K_12Model.student_contact" />
         <EntityTypeShape EntityType="K_12Model.Language" Width="1.5" PointX="0.75" PointY="0.875" />
         <AssociationConnector Association="K_12Model.student_language" />
-        <EntityTypeShape EntityType="K_12Model.K12User" Width="1.5" PointX="14.25" PointY="0.875" />
-        <EntityTypeShape EntityType="K_12Model.Role" Width="1.5" PointX="11.375" PointY="1.25" />
-        <AssociationConnector Association="K_12Model.FK_parent_user" />
-        <AssociationConnector Association="K_12Model.user_role" />
-        <InheritanceConnector EntityType="K_12Model.Role" />
-        <InheritanceConnector EntityType="K_12Model.K12User" />
-      </Diagram>
+        <EntityTypeShape EntityType="K_12Model.Activity" Width="1.5" PointX="14.5" PointY="17.25" />
+        <EntityTypeShape EntityType="K_12Model.Class" Width="1.5" PointX="12.25" PointY="17.25" />
+        <EntityTypeShape EntityType="K_12Model.Registration" Width="1.5" PointX="1.25" PointY="3.25" />
+        <EntityTypeShape EntityType="K_12Model.Section" Width="1.5" PointX="10" PointY="11.375" />
+        <EntityTypeShape EntityType="K_12Model.StaffClaim" Width="1.5" PointX="6.25" PointY="18.75" />
+        <EntityTypeShape EntityType="K_12Model.student_section" Width="1.5" PointX="18.25" PointY="9.75" />
+        <EntityTypeShape EntityType="K_12Model.Subject" Width="1.5" PointX="10" PointY="17.625" />
+        <EntityTypeShape EntityType="K_12Model.Teacher" Width="1.5" PointX="6.25" PointY="22.5" />
+        <AssociationConnector Association="K_12Model.FK_activity_class" />
+        <AssociationConnector Association="K_12Model.FK_staffclaim_address" />
+        <AssociationConnector Association="K_12Model.FK_teacher_address" />
+        <AssociationConnector Association="K_12Model.FK_class_section" />
+        <AssociationConnector Association="K_12Model.FK_class_subject" />
+        <AssociationConnector Association="K_12Model.FK_class_teacher" />
+        <AssociationConnector Association="K_12Model.FK_section_grade" />
+        <AssociationConnector Association="K_12Model.FK_student_section_section" />
+        <AssociationConnector Association="K_12Model.FK_student_section_student" />
+        <InheritanceConnector EntityType="K_12Model.Registration" />
+        <InheritanceConnector EntityType="K_12Model.Activity" />
+        <InheritanceConnector EntityType="K_12Model.Subject" />
+        <InheritanceConnector EntityType="K_12Model.Teacher" />
+        <InheritanceConnector EntityType="K_12Model.StaffClaim" />
+        <InheritanceConnector EntityType="K_12Model.Section" />
+        <AssociationConnector Association="K_12Model.FK_Registration_grade" />
+        <AssociationConnector Association="K_12Model.FK_Registration_student" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

@@ -14,6 +14,11 @@ namespace K_12.WEB.Controllers
             return View();
         }
 
+        public ActionResult Main()
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
             return View();

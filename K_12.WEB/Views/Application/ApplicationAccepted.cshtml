@@ -1,0 +1,20 @@
+﻿@model K_12.WEB.Models.ApplicationRessultViewModel
+
+
+<text>
+    <script type="text/javascript">
+
+        function continue_clicked(e)
+        {
+            require(['router'],
+     function (router) {
+         router.navigate('/admission/'+@Model.AppID);
+     }
+ );
+        }
+    </script>
+</text>
+
+
+    @Html.Kendo().Button().Name("checkbtn").Content("Continue To Admission").HtmlAttributes(new { @class = "Button-Primary" }).Events(e=>e.Click("continue_clicked"))
+

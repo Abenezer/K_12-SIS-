@@ -1,0 +1,50 @@
+﻿
+
+<div id="checkFormContainer">
+
+
+@using (Ajax.BeginForm(
+                                        "ApplicationResult",
+                                        null,
+
+                                        new AjaxOptions()
+                                        {
+
+                                            InsertionMode = InsertionMode.Replace,
+                                            UpdateTargetId = "checkFormContainer",
+                                            //OnSuccess = "onSuccess"
+                                            OnComplete = "$('#checkFormContainer').hide().fadeIn('slow')"
+
+
+
+
+                                        },
+                                        new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                        ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+
+
+
+
+
+
+    <div class="col-md-6">
+        @Html.Label("Application Id here")
+        <span class="k-textbox k-space-right" style="width:100%;">
+            @Html.Kendo().TextBox().Name("appID").HtmlAttributes(new { type="Number"})
+            <button type="submit" class="k-icon k-i-search">&nbsp;</button>
+        </span>
+    </div>
+
+
+
+
+}
+
+</div>

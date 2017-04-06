@@ -1,0 +1,177 @@
+﻿@model K_12.WEB.Models.Registration.AssignSectionViewModel
+
+
+<text>
+    <script type="text/javascript">
+        function addBtnClikced()
+        {
+            var dataSource = $("#section1StudentList").data("kendoListView").dataSource;
+            var listView = $("#unassingedStudentList").data("kendoListView")
+
+            //var index = listView.select().index(),
+            //      dataItem = listView.dataSource.view()[index];
+
+            var items = listView.items(),
+                selections = items.select();
+            for (i = 0; i < selections.length; i++) {
+                var currentIndex = items.index(selections[i]);
+                var dataItem = listView.dataSource.view()[currentIndex];
+                console.log(dataItem);
+                dataSource.add(dataItem);
+                listView.dataSource.remove(dataItem);
+            }
+
+            dataSource.sync();
+            
+    
+
+        }
+
+        function grade_selected(e) {
+            var value = $("#grade_id").val();
+
+
+            var listView = $("#unassingedStudentList").data("kendoListView");
+            var section_combo = $("#section_id").data("kendoComboBox");
+            listView.dataSource.read({ grade: value });
+            section_combo.dataSource.read({ ID: value });
+
+
+               
+
+        }
+
+
+
+        function section_selected(e) {
+       
+            var listView = $("#section1StudentList").data("kendoListView");
+          
+            listView.dataSource.read(sectionGradeData());
+          
+
+
+
+
+        }
+
+
+        function sectionGradeData() {
+            return {
+                section_id: $("#section_id").val(),
+                 grade_id : $("#grade_id").val()
+            }
+
+        }
+
+        function saveBtnClicked()
+        {
+            $.post("ajax/test.html", function (data) {
+
+                var popupNotification = $("#popupNotification").data("kendoNotification");
+                var d = new Date();
+                popupNotification.show("Saved");
+
+                $(".result").html(data);
+            });
+
+
+
+        }
+    </script>
+
+
+
+    <script type="text/x-kendo-tmpl" id="unassingedStudentsTemplate">
+           <div class="students">
+                        <h3>#:FullName#</h3>
+        </div>
+    </script>
+
+ </text>
+
+
+<div>
+    @(Html.Kendo().ListView<K_12.WEB.Models.Registration.StudentListViewModel>()
+         .TagName("div")
+    .Name("unassingedStudentList")
+     .ClientTemplateId("unassingedStudentsTemplate")
+    .Selectable()
+    .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetUnassignedStudents", "Registration"))
+                     )
+
+
+    )
+
+
+</div>
+
+
+<div class="form-group row">
+    <label class="col-sm-4 control-label" for="Grade_Combo">Choose Grade</label>
+    <div class="col-sm-4">
+
+        @(Html.Kendo().ComboBox()
+            .Name("grade_id")
+        .Placeholder("Grade")
+        .DataTextField("Grade")
+        .DataValueField("ID")
+        .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetGrades", "application"))
+                     )
+        .Events(e => e.Change("grade_selected"))
+        )
+
+    </div>
+</div>
+
+
+<div class="form-group row">
+    <label class="col-sm-4 control-label" for="Grade_Combo">Choose Section</label>
+    <div class="col-sm-4">
+
+        @(Html.Kendo().ComboBox()
+            .Name("section_id")
+        .Placeholder("Section")
+        .DataTextField("Name")
+        .DataValueField("ID")
+        .DataSource(dataSource => dataSource
+
+                     .Read(read => read.Action("GetGradeSections", "Registration"))
+
+                     )
+        .Events(e => e.Change("section_selected"))
+        )
+
+    </div>
+</div>
+
+
+<div>
+    @(Html.Kendo().ListView<K_12.WEB.Models.Registration.StudentListViewModel>()
+         .TagName("div")
+    .Name("section1StudentList")
+     .ClientTemplateId("unassingedStudentsTemplate")
+    .Selectable()
+    // .BindTo(Model.studentList)
+    .DataSource(dataSource => dataSource
+                     .Batch(true)
+                     .ServerOperation(false)
+                     .Read(read => read.Action("GetSectionStudents", "Registration"))
+                     .Create(create => create.Action("AddStudentToSection", "Registration").Data("sectionGradeData"))
+
+                     )
+
+    )
+
+
+</div>
+
+@Html.Kendo().Button().Name("addBtn").Content("Add").Events(e=>e.Click("addBtnClikced"))
+
+@Html.Kendo().Button().Name("saveBtn").Content("Save").Events(e => e.Click("saveBtnClikced"))
+
+@(Html.Kendo().Notification()
+    .Name("popupNotification")
+)

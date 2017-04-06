@@ -22,6 +22,7 @@ namespace K_12.Entity
             this.Applications = new HashSet<Application>();
             this.Contacts = new HashSet<Contact>();
             this.Languages = new HashSet<Language>();
+            this.Registrations = new HashSet<Registration>();
         }
     
         public Nullable<System.DateTime> DOB { get; set; }
@@ -42,5 +43,8 @@ namespace K_12.Entity
         public virtual ICollection<Contact> Contacts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Language> Languages { get; set; }
+        public virtual student_section student_section { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Registration> Registrations { get; set; }
     }
 }

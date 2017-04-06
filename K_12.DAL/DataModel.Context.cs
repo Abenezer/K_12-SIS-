@@ -29,5 +29,7 @@ namespace K_12.Entity
         public virtual DbSet<student_medication> student_medication { get; set; }
         public virtual DbSet<student_parent> student_parent { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
+        public virtual DbSet<Class> Classes { get; set; }
+        public virtual DbSet<student_section> student_section { get; set; }
     }
 }

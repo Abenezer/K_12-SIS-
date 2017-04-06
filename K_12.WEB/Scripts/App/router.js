@@ -7,16 +7,12 @@ define(['kendo_mvc'],
         layout.render($("#app"));
 
         router.route("/", function () {
-            require(['text!/home/index'], function (view) {
+            require(['text!/home/main'], function (view) {
                 loadView(null, view);
             });
         });
 
-        router.route("/home/index", function () {
-            require(['text!/home/index'], function (view) {
-                loadView(null, view);
-            });
-        });
+       
 
         router.route("/home/about", function () {
             require(['text!/home/about'], function (view) {
@@ -30,15 +26,55 @@ define(['kendo_mvc'],
             });
         });
 
+        router.route("/application/check", function () {
+            require(['text!/application/CheckApplication'], function (view) {
+                loadView(null, view);
+            });
+        });
+
+        //router.route("/application/result/:id", function (id) {
+        //    require(['text!/application/ApplicationResult/'+id], function (view) {
+        //        loadView(null, view);
+        //    });
+        //});
+
         router.route("/admission", function () {
             require(['text!/admission/index'], function (view) {
                 loadView(null, view);
             });
         });
         
+       
 
-          
+        router.route("/admission/:appID", function (appID) {
+            require(['text!/admission/index?appId='+appID], function (view) {
+                loadView(null, view);
+            });
+        });
+
+
+
+ router.route("/admin/processApplication", function () {
+     require(['text!/admin/processApplication'], function (view) {
+                loadView(null, view);
+            });
+        });
         
+ router.route("/admin/ConfigureAdmission", function () {
+     require(['text!/admin/ConfigureAdmission'], function (view) {
+                loadView(null, view);
+            });
+        }); 
+    router.route("/admin/Sections", function () {
+     require(['text!/admin/Sections'], function (view) {
+                loadView(null, view);
+            });
+        });      
+    router.route("/Registration/AssignSection", function () {
+        require(['text!/Registration/AssignSection'], function (view) {
+                loadView(null, view);
+            });
+        });      
 
         var loadView = function (viewModel, view, delegate) {
             var kendoView = new kendo.View(view, { model: viewModel });

@@ -1,0 +1,70 @@
+﻿@model K_12.Entity.Section
+
+
+<div id="addSectionForm">
+    @using (Ajax.BeginForm(
+                                                                                "AddSection",
+                                                                                null,
+
+                                                                                new AjaxOptions()
+                                                                                {
+
+                                                                                    InsertionMode = InsertionMode.Replace,
+                                                                                    UpdateTargetId = "addSectionForm",
+                                                                                    OnSuccess = "$('#AddSectionWindow').data('kendoWindow').close();grade_selected();"
+
+
+                                                                                },
+                                                                                new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                                                                ))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+
+
+        <div class="form-group row">
+            @Html.LabelFor(m => m.grade_id, "Grade", new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-4">
+
+                @(Html.Kendo().ComboBoxFor(m => m.grade_id)
+        .Placeholder("Grade")
+        .DataTextField("Grade")
+        .DataValueField("ID")
+        .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetGrades", "application"))
+                     )
+     
+                )
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(m => m.Name, "Section Name", new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-4">
+
+               @Html.TextBoxFor(m=>m.Name, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Section Name" })
+
+            </div>
+        </div>
+
+ 
+
+        <div class="row">
+
+            <div class="col-sm-offset-8 col-sm-4 right">
+                @Html.Kendo().Button().Name("rest_btn").Content("Cancel").HtmlAttributes(new { @class = "k-button k-danger", type = "reset", name = "ButtonType" })
+
+                @Html.Kendo().Button().Name("BtnApply").Content("Apply").HtmlAttributes(new { @class = "k-button k-primary", type = "submit", name = "ButtonType", value = "Apply" }).Icon("plus")
+
+            </div>
+        </div>
+
+
+
+
+    }
+</div>

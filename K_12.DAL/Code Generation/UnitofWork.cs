@@ -21,6 +21,11 @@ public class UnitOfWork : IUnitOfWork
         get { return new SchoolRepository(_context); }
     }
 
+    public IClassRepository Classs
+    {
+        get { return new ClassRepository(_context); }
+    }
+
     public IStudentParentRepository student_parents
     {
         get { return new StudentParentRepository(_context); }
@@ -36,16 +41,54 @@ public class UnitOfWork : IUnitOfWork
         get { return new ApplicantRepository(_context); }
     }
 
+    public ISectionRepository Sections
+    {
+        get { return new SectionRepository(_context); }
+    }
+
+    public IBaseentityRepository BaseEntitys
+    {
+        get { return new BaseentityRepository(_context); }
+    }
 
     public IApplicationRepository Applications
     {
         get { return new ApplicationRepository(_context); }
     }
 
+    public ITeacherRepository Teachers
+    {
+        get { return new TeacherRepository(_context); }
+    }
+
+    public ISubjectRepository Subjects
+    {
+        get { return new SubjectRepository(_context); }
+    }
+
+    public IStaffclaimRepository StaffClaims
+    {
+        get { return new StaffclaimRepository(_context); }
+    }
+
+    public IPersonRepository Persons
+    {
+        get { return new PersonRepository(_context); }
+    }
 
     public IParentRepository Parents
     {
         get { return new ParentRepository(_context); }
+    }
+
+      public IActivityRepository Activitys
+    {
+        get { return new ActivityRepository(_context); }
+    }
+
+    public IRegistrationRepository Registrations
+    {
+        get { return new RegistrationRepository(_context); }
     }
 
     public IPhonebookRepository PhoneBooks
@@ -56,6 +99,11 @@ public class UnitOfWork : IUnitOfWork
     public IDocumentRepository Documents
     {
         get { return new DocumentRepository(_context); }
+    }
+
+    public IStudentSectionRepository student_sections
+    {
+        get { return new StudentSectionRepository(_context); }
     }
 
     public IStudentMedicationRepository student_medications

@@ -1,7 +1,14 @@
 ﻿using K_12.BLL.Service;
+using K_12.Entity;
+using K_12.WEB.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -50,6 +57,7 @@ namespace K_12.WEB.Controllers
 
 
 
+
         private Entity.Parent CreateNewParent()
         {
             Entity.Parent parent = new Entity.Parent();
@@ -86,6 +94,18 @@ namespace K_12.WEB.Controllers
 
         }
 
+        public int? CurrentAppID
+        {
+            get
+            {
+                return (int?)Session["current_application_id"];
+            }
+            set
+            {
+                Session["current_application_id"] = value;
+
+            }
+        }
 
         private int CurrentParentIndex
         {
@@ -140,7 +160,6 @@ namespace K_12.WEB.Controllers
         }
 
 
-
         public ActionResult GetSchools()
         {
            return Json(_unitOfWork.Schools.Queryable(), JsonRequestBehavior.AllowGet);
@@ -158,16 +177,26 @@ namespace K_12.WEB.Controllers
 
 
         // GET: Admission
-        public ActionResult Index()
+        public ActionResult Index(int? appId)
         {
+                   
+            
             Session.Clear();
-
-            return View();
+            CurrentAppID = appId;
+             return View();
         }
 
         public ActionResult StudentInfo()
         {
+
+            if (CurrentAppID != null)
+            {
+                Entity.Application app = _unitOfWork.Applications.Find(CurrentAppID);
+
+                if (app != null) return View(new Models.Admission.StudentInfoViewModel() { FName=app.Applicant.FName, MName=app.Applicant.MName, Gender=app.Applicant.Gender, DOB=app.Applicant.DOB });
+            }     
             return View();
+
         }
 
 
@@ -297,7 +326,10 @@ namespace K_12.WEB.Controllers
                 { studentExtraInfo.Languages.Add(lang.ID); }
 
 
+               
                 studentExtraInfo.MedicationsList = (CurrentStudent.Medications.Count>0) ? CurrentStudent.Medications.ToList(): studentExtraInfo.MedicationsList;
+
+
                 studentExtraInfo.Contacts =   CurrentStudent.Contacts.Count>0 ? CurrentStudent.Contacts: studentExtraInfo.Contacts;
                 return studentExtraInfo;
             }
@@ -320,14 +352,15 @@ namespace K_12.WEB.Controllers
                 if (ModelState.IsValid)
                 {
                     CurrentStudent.Prev_School_id = studentExtraInfo.PrevSchoolId;
-                  
-                    foreach (string lan_id in studentExtraInfo.Languages)
+
+                   
+
+
+                    if(studentExtraInfo.isOnMedication)
                     {
-                        CurrentStudent.Languages.Add(_unitOfWork.Languages.Find(lan_id));
-                    }
-
-
                         CurrentStudent.Medications = studentExtraInfo.MedicationsList;
+                    }
+                   
                     CurrentStudent.Contacts = studentExtraInfo.Contacts;
 
 
@@ -369,7 +402,7 @@ namespace K_12.WEB.Controllers
                 {
                     //check user_exists 
                     CurrentUserModel = userViewModel;
-                    CurrentParents.First().Parent.K12User = new Entity.K12User() { Username = userViewModel.Username, Password = userViewModel.Password, Email = userViewModel.Email };
+                  //  CurrentParents.First().Parent.K12User = new Entity.K12User() { Username = userViewModel.Username, Password = userViewModel.Password, Email = userViewModel.Email };
                     CurrentStudent.Parents = CurrentParents;
                     ModelState.Clear();
                     return View("Confirmation", CurrentStudent);
@@ -397,15 +430,72 @@ namespace K_12.WEB.Controllers
 
 
         [HttpPost]
-        public ActionResult Confirmation(string ButtonType)
+        public async Task<ActionResult> Confirmation(string ButtonType)
         {
            
              if (ButtonType == "Next")
             {
+                ApplicationDbContext context = new ApplicationDbContext();
+
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+                var user = new ApplicationUser { UserName = CurrentUserModel.Username, Email = CurrentUserModel.Email , DisplayName=CurrentStudent.Parents.First().Parent.GetFullName()};
+                
+               
+                var result = await UserManager.CreateAsync(user, CurrentUserModel.Password);
+                if (result.Succeeded)
+                {
+                    UserManager.AddToRole(user.Id, "Parent");
+                    CurrentStudent.Parents.First().Parent.user_id = user.Id;
+
+                    ApplicationSignInManager SignInManager = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
 
-              
 
+                    CurrentStudent.Languages.Clear();
+
+                    foreach (string lan_id in StudentExtraInfoModel.Languages)
+                    {
+                        CurrentStudent.Languages.Add(_unitOfWork.Languages.Find(lan_id));
+                    }
+
+                    if (CurrentAppID != null)
+                    {
+                        Entity.Application app = _unitOfWork.Applications.Find(CurrentAppID);
+                        app.app_status = BLL.Constants.ApplicationStatuses.ADMITED;
+                        _unitOfWork.Applications.Update(app);
+                        CurrentStudent.Applications.Add(app);
+                    }
+
+
+
+                    _unitOfWork.Students.Add(CurrentStudent);
+
+                    try
+                    {
+                        await _unitOfWork.SaveAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+
+                    }
+
+
+
+
+
+                    return View("FinishAdmission", new Models.Admission.SuccessAdmissionViewModel()
+                    {
+                        Email = user.Email,
+                        UserName = user.UserName,
+                        StudentFullName = CurrentStudent.GetFullName(),
+                        ParentFullName = CurrentStudent.Parents.First().Parent.GetFullName(),
+                        Relation = CurrentStudent.Parents.First().Relation
+
+                    });
+
+                }
 
 
             }

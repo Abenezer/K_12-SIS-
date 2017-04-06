@@ -170,7 +170,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     {
         //entity.ObjectState = ObjectState.Modified;
         _entities.Attach(entity);
-       // _context.SyncObjectState(entity);
+        _context.Entry(entity).State = EntityState.Modified;
     }
 }
 

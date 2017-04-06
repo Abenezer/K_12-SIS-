@@ -45,9 +45,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="BLL.cs" />
     <Compile Include="BussinessConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\ActivityService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
     <Compile Include="Service\AddressService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
@@ -56,6 +60,12 @@
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\ApplicationService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\BaseentityService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ClassService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\ContactService.cs">
@@ -72,6 +82,9 @@
     <Compile Include="Service\GradeInfoService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\LanguageService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
     <Compile Include="Service\MedicationService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
@@ -81,17 +94,36 @@
     <Compile Include="Service\PhonebookService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\ProfileService.cs" />
+    <Compile Include="Service\RegistrationService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
     <Compile Include="Service\SchoolService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\SectionService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
     <Compile Include="Service\Service.cs" />
+    <Compile Include="Service\StaffclaimService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
     <Compile Include="Service\StudentMedicationService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\StudentParentService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\StudentSectionService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
     <Compile Include="Service\StudentService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\SubjectService.cs">
+      <DependentUpon>EntityServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\TeacherService.cs">
       <DependentUpon>EntityServices.tt</DependentUpon>
     </Compile>
   </ItemGroup>

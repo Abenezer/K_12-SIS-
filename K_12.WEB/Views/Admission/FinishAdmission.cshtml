@@ -1,0 +1,22 @@
+﻿@model K_12.WEB.Models.Admission.SuccessAdmissionViewModel
+
+
+<text>
+    <script>
+
+        $(function () {
+            // yay!
+            setProgress(5)
+
+        });
+    </script>
+</text>
+
+
+<<div class="jumbotron">
+    <h1> Succesful Admission of @Model.StudentFullName</h1>
+
+    <p>New User Account Created for Parent (@Model.Relation) @Model.ParentFullName </p>
+    <p>UserName: @Model.UserName</p>
+     <p>Email: @Model.Email</p>
+</div>

@@ -25,11 +25,10 @@ namespace K_12.Entity
         public Nullable<int> address_id { get; set; }
         public string Work_place { get; set; }
         public string Occupation { get; set; }
-        public Nullable<int> user_id { get; set; }
+        public string user_id { get; set; }
     
         public virtual Address Address { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<student_parent> Students { get; set; }
-        public virtual K12User K12User { get; set; }
     }
 }

@@ -1,0 +1,140 @@
+﻿
+
+<text>
+
+    <script type="text/javascript">
+        var detailsTemplate = kendo.template($("#template").html());
+
+        function showDetails(e) {
+            e.preventDefault();
+
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var wnd = $("#Details").data("kendoWindow");
+
+            wnd.content(detailsTemplate(dataItem));
+            wnd.center().open();
+            
+        }
+
+        function Grid_OnRowSelect(e) 
+        {
+            var dataItem = this.dataItem(this.select());
+            $.get('/Admin/ApplicationDetail/' + dataItem.ID, function (data) {
+
+
+                $('#applicationDetailContent').html(data);
+
+                $('#applicationDetailContent').fadeIn('slow');
+            });
+
+        }
+
+
+        function gradeData(e) {
+            var value = $("#gradeFilter").data("kendoDropDownList").value();
+            return { Grade: value }; // send the filter value as part of the Read request
+        }
+
+        function reload_grid() {
+            var grid = $("#ApplicantGrid").data("kendoGrid");
+            grid.dataSource.read(); // rebind the Grid's DataSource
+        }
+        function status_changed(e) {
+            var grid = $('#ApplicantGrid').data('kendoGrid');
+            var field = 'Status';
+            var operator = "startswith";
+            var value = e.sender.value();
+         
+                grid.dataSource.filter({
+                    field: field,
+                    operator: operator,
+                    value: value
+                });
+                $('#statusText').html(value);
+            
+          
+
+        }
+    </script>
+
+</text>
+
+
+<h1> <span id="statusText"></span>  Applications  </h1>
+
+@(Html.Kendo().DropDownList()
+        .Name("gradeFilter")
+      
+        .OptionLabel("All Grades")
+        .DataTextField("Grade")
+        .DataValueField("Grade")
+        .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetGrades", "application"))
+                     )
+        .Events(e => e.Change("reload_grid"))
+)
+
+@(Html.Kendo().DropDownList()
+        .Name("statusFilter")
+        .AutoBind(false)
+        .OptionLabel("Select Status")
+        .BindTo(K_12.BLL.Constants.ApplicationStatuses.avarailbleStatuses)
+        .Events(e => e.Change("status_changed"))
+)
+
+
+@(Html.Kendo().Grid<K_12.WEB.Models.Admin.ApplicationListViewModel>()
+    .Name("ApplicantGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(a => a.FullName).Groupable(false);
+        columns.Bound(a => a.Gender);
+        columns.Bound(a=>a.Age);
+        columns.Bound(a => a.Grade);
+        columns.Bound(a => a.Status);
+        columns.Command(command => command.Custom("ViewDetails").Click("showDetails")).Width(180);
+    })
+    .Pageable()
+    .Selectable()
+    .Sortable()
+    .Events(events => events.Change("Grid_OnRowSelect"))
+    .Filterable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("GetApplications", "Admin").Data("gradeData"))
+        .ServerOperation(false)
+    )
+)
+
+
+
+
+
+@(Html.Kendo().Window().Name("Details")
+    .Title("Application Details")
+    .Visible(false)
+
+    .Modal(true)
+    .Draggable(true)
+    .Width(300)
+)
+
+
+<div id="applicationDetailContent" style="display:none;"> </div>
+
+
+
+    <text>
+                       <script type="text/x-kendo-template" id="template">
+                           <div id="details-container">
+                               <h2>#= FullName #</h2>
+                               <em>#= Grade #</em>
+                               <em>#= ID #</em>
+                               <em>#= AppDateString #</em>
+                              
+                           </div>
+                       </script>
+                       </text>
+
+
+    

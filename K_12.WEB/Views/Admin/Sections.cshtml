@@ -1,0 +1,97 @@
+﻿
+<text>
+
+    <script type="text/x-kendo-tmpl" id="template">
+        <div class="sections">
+            <h3>#:Name#</h3>
+        </div> 
+    </script>
+
+
+    <script>
+       
+        function grade_selected(e) {
+            var value = $("#SelectedGrade").val();
+            var list = $("#sectionList").data("kendoListView");
+          
+
+            list.dataSource.read({ ID: value });
+
+        }
+
+
+        function addSection(e) {
+            var grade = $("#SelectedGrade").val();
+            e.preventDefault();
+            var wnd = $("#AddSectionWindow").data("kendoWindow");
+            $.get('/Admin/AddSection/?grade_id='+grade, function (data) {
+                wnd.title("Add Section");
+                wnd.content(data);
+                wnd.center().open();
+            });
+
+        }
+
+        function SectionSelected(e) {
+            var dataItem = this.dataItem(this.select());
+            $.get('/Admin/EditSection/' + dataItem.ID, function (data) {
+
+
+                $('#editSectionForm').html(data);
+
+                $('#editSectionForm').fadeIn('slow');
+            });
+        }
+
+    </script>
+</text>
+
+
+<div class="form-group row">
+    <label class="col-sm-4 control-label">Choose Grade</label>
+    <div class="col-sm-4">
+
+        @(Html.Kendo().ComboBox()
+        .Name("SelectedGrade")
+        .Placeholder("Grade")
+        .DataTextField("Grade")
+        .DataValueField("ID")
+        .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetGrades", "application"))
+                     )
+        .Events(e => e.Change("grade_selected"))
+        )
+
+    </div>
+
+
+</div>
+@Html.Kendo().Button().Name("addSection").Content("Add Section").Events(e => e.Click("addSection"))
+
+<div >
+    @(Html.Kendo().ListView<K_12.Entity.Section>()
+         .TagName("div")
+    .Name("sectionList")
+     .ClientTemplateId("template")
+    .Selectable()
+    .Events(e=>e.Change("SectionSelected"))
+    .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetGradeSections", "Admin"))
+                     )
+
+
+    )
+
+
+</div>
+
+<div id="editSectionForm"></div>
+
+@(Html.Kendo().Window().Name("AddSectionWindow")
+
+    .Visible(false)
+
+    .Modal(true)
+    .Draggable(true)
+    .Width(800)
+)

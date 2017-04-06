@@ -3,6 +3,7 @@ using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 using K_12.Entity;
 using K_12.BLL.Service;
+using K_12.WEB.Controllers;
 
 namespace K_12.WEB
 {
@@ -45,18 +46,20 @@ namespace K_12.WEB
                .RegisterType<IAddressRepository, AddressRepository>()
                .RegisterType<IContactRepository, ContactRepository>()
                .RegisterType<IApplicantRepository, ApplicantRepository>()
+                              .RegisterType<IApplicationRepository, ApplicationRepository>()
                   .RegisterType<IDocumentRepository, DocumentRepository>()
                      .RegisterType<IPhonebookRepository, PhonebookRepository>()
                          .RegisterType<IGradeInfoRepository, GradeInfoRepository>()
                          .RegisterType<IParentRepository, ParentRepository>()
                          .RegisterType<IStudentRepository, StudentRepository>()
-
+                          .RegisterType<IRegistrationRepository, RegistrationRepository>()
 
 
                //.RegisterType<IRepositoryAsync<Product>, Repository<Product>>()
                .RegisterType<IAddressService, AddressService>()
                .RegisterType<IContactService, ContactService>()
                 .RegisterType<IApplicantService, ApplicantService>()
+                                .RegisterType<IApplicationService, ApplicationService>()
                 .RegisterType<IDocumentService, DocumentService>()
                 .RegisterType<IPhonebookService, PhonebookService>()
                   .RegisterType<IGradeInfoService, GradeInfoService>()
@@ -64,11 +67,13 @@ namespace K_12.WEB
                   .RegisterType<IStudentService, StudentService>()
                    .RegisterType<IParentService, ParentService>()
                      .RegisterType<IAdmissionService, AdmissionService>()
+                       .RegisterType<IProfileService, ProfileService>()
+
+              .RegisterType<IRegistrationService, RegistrationService>();
 
 
-
-
-               ;
+            container.RegisterType<AccountController>(new InjectionConstructor());
+          
 
 
             //.RegisterType<ICustomerService, CustomerService>()

@@ -10,8 +10,11 @@ public class BLL
     {
         public static BussinessConfiguration Configuration { get; set; }
 
-       static BLL()
+      
+
+     static BLL()
         {
+           
             Configuration = new BussinessConfiguration();
             Configuration.Initialize();
         }

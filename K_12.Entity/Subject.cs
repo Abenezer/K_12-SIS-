@@ -12,17 +12,8 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Role : BaseEntity 
+    public partial class Subject : BaseEntity 
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Role()
-        {
-            this.K12Users = new HashSet<K12User>();
-        }
-    
-        public string Rolename { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<K12User> K12Users { get; set; }
+        public string Name { get; set; }
     }
 }

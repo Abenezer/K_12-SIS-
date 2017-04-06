@@ -28,7 +28,10 @@ namespace K_12.WEB
 
             builder.EntitySet<Entity.student_medication>("StudentMedication");
             builder.EntitySet<Entity.student_parent>("StudentParent");
-
+            builder.EntitySet<Entity.Section>("Section");
+            builder.EntitySet<Entity.Class>("Class");
+            builder.EntitySet<Entity.Activity>("Activity");
+            builder.EntitySet<Entity.student_section>("StudentSection");
 
 
             //builder.EntitySet<Entities.Models.Customer>(typeof(Entities.Models.Customer).Name);

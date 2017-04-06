@@ -8,6 +8,17 @@
             // yay!
             setProgress(2)
 
+            $("#medicationList").hide();
+            $("#isOnMedication").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#medicationList").show(300);
+                } else {
+                    $("#medicationList").hide(200);
+                }
+            });
+
+
+
         });
     </script>
 </text>
@@ -42,7 +53,7 @@
 
 
 
-    <fieldset class="col-md-12">
+    <fieldset class="col-md-4">
 
         <!-- Form Name -->
         <legend>Previous School </legend>
@@ -50,15 +61,16 @@
         <!-- Text input-->
         <div class="form-group">
             
-            <div class="col-sm-4">
+            <div class="col-sm-12">
                 @(Html.Kendo().ComboBoxFor(m => m.PrevSchoolId)
         .Placeholder("Previous School")
         .DataTextField("Name")
         .DataValueField("ID")
+        .HtmlAttributes(new {style="Width:75%"})
         .DataSource(dataSource => dataSource
                      .Read(read => read.Action("GetSchools", "admission"))
                      )
-       
+
                 )
 
 
@@ -72,14 +84,14 @@
 
         </fieldset> 
 
-        <fieldset class="col-md-6">
+        <fieldset class="col-md-4">
             <legend>Medication Info</legend>
         <!-- Select Basic -->
         <div class="form-group">
            
-            <div class="col-sm-8">
+            <div class="col-sm-12">
             
-                @(Html.CheckBoxFor(m=>m.isOnMedication)) 
+                @Html.Kendo().CheckBoxFor(m=>m.isOnMedication).Checked(false)
                 <span>isOnMedication</span>
 
             </div>
@@ -98,12 +110,12 @@
 
 
 
-    <fieldset class="col-md-6">
+    <fieldset class="col-md-4">
 
         <legend>Home Spoken Langues</legend>
 
         <div class="form-group">
-               <div class="col-sm-8">
+               <div class="col-sm-12">
 
                 @(Html.Kendo().MultiSelectFor(m=>m.Languages)
           .DataTextField("Name")

@@ -7,6 +7,7 @@
         'kendo_mvc': '/scripts/kendo/2015.3.1111/kendo.aspnetmvc.min',
         'text': '/scripts/text',
         'router': '/scripts/app/router',
+        'profRouter': '/scripts/app/ProfileModule/router',
         'domain': '/scripts/app/domain'
     },
     shim: {
@@ -15,12 +16,7 @@
          'kendo': ['jquery']
         
     },
-    priority: ['text', 'router', 'app'],
+    priority: ['text', 'router', 'app','profApp'],
     jquery: '1.10.2',
     waitSeconds: 30
-});
-require([
-  'app','domain'
-], function (app) {
-    app.initialize();
 });

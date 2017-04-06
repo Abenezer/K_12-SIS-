@@ -1,0 +1,33 @@
+﻿<text>
+
+    <script type="text/javascript">
+        function applyRegClick(e)
+        {
+            e.preventDefault();
+            var wnd = $("#ApplyWindow").data("kendoWindow");
+            $.get('/Registration/Apply/', function (data) {
+                wnd.title("Apply For Registration") ;
+                wnd.content(data);
+                wnd.center().open();
+            });
+
+           
+            
+        }
+
+    </script>
+
+</text>
+
+
+@(Html.Kendo().Window().Name("ApplyWindow")
+   
+    .Visible(false)
+
+    .Modal(true)
+    .Draggable(true)
+    .Width(800)
+)
+
+@Html.Kendo().Button().Name("applyBtn").Content("Apply for Registration").Events(e => e.Click("applyRegClick"))
+

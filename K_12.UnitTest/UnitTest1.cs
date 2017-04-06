@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using K_12.BLL.Service;
+using System.Linq;
 
 namespace K_12.UnitTest
 {
@@ -85,6 +86,37 @@ namespace K_12.UnitTest
 
             Assert.AreEqual(c.Address.Email, c2.Address.Email);
         }
+
+        [TestMethod]
+        public void TestLang()
+        {
+            UnitOfWork uw = new UnitOfWork(new Entity.K_12Entities());
+            Entity.Student s = new Entity.Student();
+            s.Languages.Add(uw.Languages.Find("ENG"));
+            uw.Students.Add(s);
+            uw.Save();
+
+            Assert.IsNotNull(uw.Students.Find(s.ID).Languages.First());
+
+
+
+        }
+
+        [TestMethod]
+        public void TestAppStatus()
+        {
+            var context = new Entity.K_12Entities();
+            UnitOfWork uw = new UnitOfWork(context);
+            Entity.Application a  = uw.Applications.Find(11);
+            a.app_status = "Waiting";
+            uw.Applications.Update(a);
+            uw.Save();
+            Assert.AreEqual(uw.Applications.Find(11).app_status, "Waiting");
+
+
+
+        }
+
 
     }
 }

@@ -48,12 +48,12 @@
         <legend>Parent Info</legend>
 
         <!-- Text input-->
-        <div class="form-group">
-            <div class="col-sm-4">
-                @Html.LabelFor(m => m.Parent.FName, "Full Name", new { @class = "col-sm-4 control-label" })
+        <div class="form-group col-md-12">
+            <div class="col-sm-2">
+                @Html.LabelFor(m => m.Parent.FName, "Full Name", new { @class = "col-sm-4 control-label", style = "width:100%;" })
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     @*<span class="k-textbox k-space-right" style="width:100%;">*@
                     @Html.TextBoxFor(model => model.Parent.FName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "First Name" })
                     @*<a href="#" class="k-icon k-i-arrow-s">&nbsp;</a>*@
@@ -62,17 +62,17 @@
                 </div>
 
 
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     @Html.TextBoxFor(model => model.Parent.MName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Father Name" })
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     @Html.TextBoxFor(model => model.Parent.LName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "G.Father Name" })
                 </div>
             </div>
 
         <!-- Select Basic -->
-        <div class="form-group">
+        <div class="form-group col-md-4">
             @Html.LabelFor(m => m.Parent.Gender, "Gender", new { @class = "col-sm-4 control-label" })
             <div class="col-sm-4">
 
@@ -98,7 +98,7 @@
         </div>
 
         <!-- Text input-->
-        <div class="form-group">
+        <div class="form-group col-md-4">
             @Html.LabelFor(m => m.Parent.DOB, "Birth Date", new { @class = "col-sm-4 control-label" })
             <div class="col-sm-4">
                 @* <input id="student_dob" name="student_dob" type="text" placeholder="DD/MM/YY" class="form-control input-md">*@
@@ -110,7 +110,7 @@
         </div>
 
 
-        <div class="form-group">
+        <div class="form-group col-md-4">
             @Html.Label( "Relation", new { @class = "col-sm-4 control-label" })
             <div class="col-sm-4">
 

@@ -12,19 +12,20 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class K12User : BaseEntity 
+    public partial class Teacher : Person 
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public K12User()
+        public Teacher()
         {
-            this.Roles = new HashSet<Role>();
+            this.Classes = new HashSet<Class>();
         }
     
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
+        public Nullable<System.DateTime> DOB { get; set; }
+        public string user_id { get; set; }
+        public Nullable<int> address_id { get; set; }
     
+        public virtual Address Address { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Class> Classes { get; set; }
     }
 }

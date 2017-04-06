@@ -1,0 +1,49 @@
+﻿
+<text>
+     <script type="text/javascript">
+         function method_selected (e)
+         {
+             var dataItem = this.dataItem(e.item);
+          
+             $('#descContainer').html(dataItem.Value);
+
+             $('#adescContainer').fadeIn('slow');
+
+         }
+
+         function apply_clicked (e)
+         {
+             var method = $('#admissionMethod').val();
+            
+             $.ajax({
+                 type: 'POST',
+                 url: '/admin/ConfigureAdmission',
+                 data: {method:method}
+             }).done(function (data) {
+                
+                 //todo do redirect to main conficuration page 
+
+
+             })
+         }
+         
+
+    </script>
+</text>
+
+
+
+@(Html.Kendo().DropDownList()
+    .Name("admissionMethod")
+    .DataTextField("Text")
+    .DataValueField("Text")
+    .Events(e=>e.Change("method_selected").DataBound("method_selected"))
+    .BindTo(K_12.WEB.Utilities.DropLists.AdmisionMethodList)
+
+
+
+    )
+
+@Html.Kendo().Button().Name("applyBtn").Content("Apply").Events(e => e.Click("apply_clicked"))
+
+<div id="descContainer"></div>

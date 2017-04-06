@@ -10,14 +10,15 @@ namespace K_12.BLL
     {
         public BussinessConfiguration()
         {
-            ApplicationTitle = "Sample Application";
-            MaxPageItems = 20;
+            AdmisssionMethod = Constants.AdmissionMethods.MANUAL;
+            
         }
 
         // Create properties for values to read or persist to/from the config store
-        public string ApplicationTitle { get; set; }
-        public string ConnectionString { get; set; }
-        public int MaxPageItems { get; set; }   // number
+        public string AdmisssionMethod { get; set; }
+
+        
+
 
     }
 }

@@ -1,0 +1,39 @@
+﻿@model K_12.WEB.Models.ApplicationRessultViewModel 
+
+@using K_12.BLL.Constants
+
+@if (!Model.AppFound)
+{
+    <h1> This Application does not exist</h1>
+    <p> Please check the application ID </p>
+
+}
+
+else if (Model.AppStatus == ApplicationStatuses.PENDING)
+{
+
+    <h1> We are still processing your application please come back later</h1>
+
+    <p>We will inform you when we finish processing</p>
+
+}
+
+else if (Model.AppStatus == ApplicationStatuses.WAITING)
+{
+    <h1>We have put you on wating list</h1>
+    <p>We will inform you when if your status changed</p>
+}
+
+else if (Model.AppStatus == ApplicationStatuses.REJECTED)
+{
+    <h1>We are sorry to inform you we dont have a place for you right now</h1>
+    <p>We will inform you when you can reapply</p>
+}
+
+
+else if (Model.AppStatus == ApplicationStatuses.ADMITED)
+{
+    <h1>You are already admited </h1>
+    <p>you dont have to check application status</p>
+}
+

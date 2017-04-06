@@ -1,0 +1,174 @@
+﻿@using K_12.Entity
+
+@model K_12.Entity.Application
+
+<text>
+    <script type="text/javascript">
+        function showDocs(e)
+        {
+         
+
+            var wnd = $("#documetsWindow").data("kendoWindow");
+
+            wnd.center().open();
+        }
+    </script>
+
+</text>
+
+
+
+@using (Ajax.BeginForm(
+                                                                            "SetStatus",
+                                                                            null,
+
+                                                                            new AjaxOptions()
+                                                                            {
+
+                                                                                InsertionMode = InsertionMode.Replace,
+                                                                                UpdateTargetId = "applicationDetailContent",
+                                                                                //OnSuccess = "onSuccess",
+                                                                                OnSuccess = "reload_grid"
+
+
+                                                                            },
+                                                                            new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                                                            ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+<h1>  @Model.Applicant.GetFullName()</h1>
+
+<h1>  @Model.Applicant.Gender</h1>
+
+@*<h1>  @Model.Applicant.Age</h1>*@
+
+<h1>  @Model.app_status</h1>
+
+
+
+
+<div class="row">
+
+    @foreach (K_12.Entity.Document doc in Model.Documents)
+    {
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <a href='@Url.Action("Document", "Application", new { filepath=doc.Doc_path} )'>
+                    <img src='@Url.Action("Document", "Application", new { filepath=doc.Doc_path} )' alt=@doc.type style="width:100%" />
+                    <div class="caption">
+                        <p>@doc.type</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+   
+    }
+
+    </div>
+
+
+
+
+    @Html.Kendo().Button().Name("btnShow").Events(e=>e.Click("showDocs")).Content("Open Documents").HtmlAttributes(new {Type="none" });
+
+   
+
+
+
+
+
+    <div class="row">
+
+        @Html.HiddenFor(a => a.ID);
+        <div class="col-sm-offset-8 col-sm-4 right">
+            @Html.Kendo().Button().Name("btnAccept").Content("Accept").HtmlAttributes(new { @class = "k-button k-success", Type = "submit", name = "ButtonType", value = K_12.BLL.Constants.ApplicationStatuses.ACCEPTED })
+            @Html.Kendo().Button().Name("btnReject").Content("Reject").HtmlAttributes(new { @class = "k-button k-danger", Type = "submit", name = "ButtonType", value = K_12.BLL.Constants.ApplicationStatuses.REJECTED })
+            @Html.Kendo().Button().Name("BtnWait").Content("Wait").HtmlAttributes(new { @class = "k-button k-primary", Type = "submit", name = "ButtonType", value = K_12.BLL.Constants.ApplicationStatuses.WAITING })
+        </div>
+    </div>
+
+    }
+
+@(Html.Kendo().Window().Name("documetsWindow")
+    .Title("Application Documents")
+    .Visible(false)
+        .Content(
+    @<text>
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      
+        @for (int j = 0; j < Model.Documents.Count(); j++)
+        {
+            if (j == 0)
+            {
+                <li data-target="#myCarousel" data-slide-to="@j" class="active"></li>
+
+            }
+            else
+            {
+                <li data-target="#myCarousel" data-slide-to="@j"></li>
+            }
+
+        }
+        
+
+
+
+       
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+
+
+        @{int i = 0; }
+        @foreach (K_12.Entity.Document doc in Model.Documents)
+        {
+
+            <div class="item @(i == 0 ?"active":"")">
+                <img src='@Url.Action("Document", "Application", new { filepath=doc.Doc_path} )' alt=@doc.type />
+                <div class="carousel-caption">
+                    <h3>@doc.type</h3>
+                    <p>The atmosphere in Chania has a touch of Florence and Venice.</p>
+                </div>
+            </div>
+
+            i++;
+
+
+
+        }
+
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+
+
+    </text>)
+    .Modal(true)
+    .Draggable(true)
+    .Width(800)
+)
+
+
+
+
+        
