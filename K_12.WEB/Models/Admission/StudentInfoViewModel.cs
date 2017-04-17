@@ -21,7 +21,7 @@ namespace K_12.WEB.Models.Admission
         public string Gender { get; set; }
 
         [Required]
-        public Nullable<DateTime> DOB { get; set; }
+        public DateTime? DOB { get; set; }
 
         public string POB_City { get; set; }
         public string POB_Country { get; set; }

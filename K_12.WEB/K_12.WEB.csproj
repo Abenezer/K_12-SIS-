@@ -78,6 +78,14 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Data.Edm, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Edm.5.6.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
@@ -123,8 +131,12 @@
       <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.Jwt, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Jwt.3.0.0\lib\net45\Microsoft.Owin.Security.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -173,6 +185,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -276,8 +292,11 @@
     <Compile Include="Controllers\AdmissionController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ParentController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
+    <Compile Include="Controllers\StaffController.cs" />
+    <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -289,6 +308,12 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Admin\ApplicationListViewModel.cs" />
+    <Compile Include="Models\Admin\ClassListViewModel.cs" />
+    <Compile Include="Models\Admin\SubjectListViewModel.cs" />
+    <Compile Include="Models\Parent\StudentActivityViewModel.cs" />
+    <Compile Include="Models\Parent\StudentViewModel.cs" />
+    <Compile Include="Models\Profile\MenuItem.cs" />
+    <Compile Include="Models\Staff\StaffClaimViewModel.cs" />
     <Compile Include="Models\Admission\MedicationViewModel.cs" />
     <Compile Include="Models\Admission\StudentExtraInfoViewModel.cs" />
     <Compile Include="Models\Admission\StudentInfoViewModel.cs" />
@@ -304,6 +329,9 @@
     <Compile Include="Models\Registration\AssignSectionViewModel.cs" />
     <Compile Include="Models\Registration\SectionViewModel.cs" />
     <Compile Include="Models\Registration\StudentListViewModel.cs" />
+    <Compile Include="Models\Staff\StaffListViewModel.cs" />
+    <Compile Include="Models\Teacher\ActivityListViewModel.cs" />
+    <Compile Include="Models\Teacher\ClassListViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -694,7 +722,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Nationalities.json" />
+    <Content Include="Scripts\jquery.signalR-2.2.1.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.1.min.js" />
     <Content Include="Views\Registration\RegistrationApplied.cshtml" />
+    <Content Include="Resources\SubCities.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\App\app.js" />
     <Content Include="Scripts\App\domain.js" />
@@ -1046,6 +1077,24 @@
     <Content Include="Views\Admin\EditSection.cshtml" />
     <Content Include="Views\Registration\AssignSection.cshtml" />
     <Content Include="Views\Registration\Sections.cshtml" />
+    <Content Include="Views\Staff\Claim.cshtml" />
+    <Content Include="Views\Staff\SuccessClaim.cshtml" />
+    <Content Include="Views\Admin\StaffClaims.cshtml" />
+    <Content Include="Views\Admin\StaffClaimDetail.cshtml" />
+    <Content Include="Views\Staff\Register.cshtml" />
+    <Content Include="Views\Staff\StaffNotFound.cshtml" />
+    <Content Include="Views\Staff\StaffNotConfirmed.cshtml" />
+    <Content Include="Views\Shared\_registrationPartial.cshtml" />
+    <Content Include="Views\Staff\UserRegistration.cshtml" />
+    <Content Include="Views\Staff\StaffInfo.cshtml" />
+    <Content Include="Views\Staff\SuccessRegistration.cshtml" />
+    <Content Include="Views\Admin\Classes.cshtml" />
+    <Content Include="Views\Admin\AddEditClass.cshtml" />
+    <Content Include="Views\Teacher\Activities.cshtml" />
+    <Content Include="Views\Teacher\Classes.cshtml" />
+    <Content Include="Views\Teacher\AddActivity.cshtml" />
+    <Content Include="Views\Parent\Student.cshtml" />
+    <Content Include="Views\Parent\StudentActivities.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Temp\" />

@@ -173,7 +173,7 @@
           <Property Name="Name" Type="varchar" MaxLength="5" />
           <Property Name="grade_id" Type="int" />
         </EntityType>
-        <EntityType Name="StaffClaim">
+        <EntityType Name="Staff">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -185,7 +185,9 @@
           <Property Name="DOB" Type="date" />
           <Property Name="Status" Type="varchar" MaxLength="10" />
           <Property Name="address_id" Type="int" />
-          <Property Name="StaffType" Type="varchar" MaxLength="10" />
+          <Property Name="StaffType" Type="varchar" MaxLength="20" />
+          <Property Name="user_id" Type="nvarchar" MaxLength="128" />
+          <Property Name="Claim_Date" Type="date" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -251,18 +253,21 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="20" />
         </EntityType>
+        <EntityType Name="subject_grade">
+          <Key>
+            <PropertyRef Name="subject_id" />
+            <PropertyRef Name="grade_id" />
+          </Key>
+          <Property Name="subject_id" Type="int" Nullable="false" />
+          <Property Name="grade_id" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Teacher">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FName" Type="varchar" MaxLength="20" />
-          <Property Name="MName" Type="varchar" MaxLength="20" />
-          <Property Name="LName" Type="varchar" MaxLength="20" />
-          <Property Name="Gender" Type="char" MaxLength="1" />
-          <Property Name="DOB" Type="date" />
-          <Property Name="user_id" Type="nvarchar" MaxLength="128" />
-          <Property Name="address_id" Type="int" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Rating" Type="int" />
+          <Property Name="isHomeRoom" Type="bit" />
         </EntityType>
         <Association Name="FK_activity_class">
           <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
@@ -470,14 +475,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_staffclaim_address">
+        <Association Name="FK_staff_address">
           <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
-          <End Role="StaffClaim" Type="Self.StaffClaim" Multiplicity="*" />
+          <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Address">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="StaffClaim">
+            <Dependent Role="Staff">
               <PropertyRef Name="address_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -614,15 +619,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_teacher_address">
-          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
-          <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
+        <Association Name="FK_subject_grade_grade">
+          <End Role="Grade_Info" Type="Self.Grade_Info" Multiplicity="1" />
+          <End Role="subject_grade" Type="Self.subject_grade" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Address">
+            <Principal Role="Grade_Info">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="subject_grade">
+              <PropertyRef Name="grade_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_subject_grade_subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="subject_grade" Type="Self.subject_grade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="subject_grade">
+              <PropertyRef Name="subject_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teacher_staff">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Teacher">
-              <PropertyRef Name="address_id" />
+              <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -643,7 +672,7 @@
           <EntitySet Name="Registration" EntityType="Self.Registration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="School" EntityType="Self.School" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="StaffClaim" EntityType="Self.StaffClaim" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="student_contact" EntityType="Self.student_contact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="student_language" EntityType="Self.student_language" Schema="dbo" store:Type="Tables" />
@@ -651,6 +680,7 @@
           <EntitySet Name="student_parent" EntityType="Self.student_parent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="student_section" EntityType="Self.student_section" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="subject_grade" EntityType="Self.subject_grade" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_activity_class" Association="Self.FK_activity_class">
             <End Role="Class" EntitySet="Class" />
@@ -720,9 +750,9 @@
             <End Role="Grade_Info" EntitySet="Grade_Info" />
             <End Role="Section" EntitySet="Section" />
           </AssociationSet>
-          <AssociationSet Name="FK_staffclaim_address" Association="Self.FK_staffclaim_address">
+          <AssociationSet Name="FK_staff_address" Association="Self.FK_staff_address">
             <End Role="Address" EntitySet="Address" />
-            <End Role="StaffClaim" EntitySet="StaffClaim" />
+            <End Role="Staff" EntitySet="Staff" />
           </AssociationSet>
           <AssociationSet Name="FK_student_contact_contact" Association="Self.FK_student_contact_contact">
             <End Role="Contact" EntitySet="Contact" />
@@ -768,8 +798,16 @@
             <End Role="Student" EntitySet="Student" />
             <End Role="student_section" EntitySet="student_section" />
           </AssociationSet>
-          <AssociationSet Name="FK_teacher_address" Association="Self.FK_teacher_address">
-            <End Role="Address" EntitySet="Address" />
+          <AssociationSet Name="FK_subject_grade_grade" Association="Self.FK_subject_grade_grade">
+            <End Role="Grade_Info" EntitySet="Grade_Info" />
+            <End Role="subject_grade" EntitySet="subject_grade" />
+          </AssociationSet>
+          <AssociationSet Name="FK_subject_grade_subject" Association="Self.FK_subject_grade_subject">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="subject_grade" EntitySet="subject_grade" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teacher_staff" Association="Self.FK_Teacher_staff">
+            <End Role="Staff" EntitySet="Staff" />
             <End Role="Teacher" EntitySet="Teacher" />
           </AssociationSet>
         </EntityContainer>
@@ -852,24 +890,12 @@
             <End Role="Class" EntitySet="Classes" />
             <End Role="Activity" EntitySet="BaseEntities" />
           </AssociationSet>
-          <AssociationSet Name="FK_staffclaim_address" Association="K_12Model.FK_staffclaim_address">
-            <End Role="Address" EntitySet="BaseEntities" />
-            <End Role="StaffClaim" EntitySet="BaseEntities" />
-          </AssociationSet>
-          <AssociationSet Name="FK_teacher_address" Association="K_12Model.FK_teacher_address">
-            <End Role="Address" EntitySet="BaseEntities" />
-            <End Role="Teacher" EntitySet="BaseEntities" />
-          </AssociationSet>
           <AssociationSet Name="FK_class_section" Association="K_12Model.FK_class_section">
             <End Role="Section" EntitySet="BaseEntities" />
             <End Role="Class" EntitySet="Classes" />
           </AssociationSet>
           <AssociationSet Name="FK_class_subject" Association="K_12Model.FK_class_subject">
             <End Role="Subject" EntitySet="BaseEntities" />
-            <End Role="Class" EntitySet="Classes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_class_teacher" Association="K_12Model.FK_class_teacher">
-            <End Role="Teacher" EntitySet="BaseEntities" />
             <End Role="Class" EntitySet="Classes" />
           </AssociationSet>
           <AssociationSet Name="FK_section_grade" Association="K_12Model.FK_section_grade">
@@ -891,6 +917,23 @@
           <AssociationSet Name="FK_Registration_student" Association="K_12Model.FK_Registration_student">
             <End Role="Student" EntitySet="BaseEntities" />
             <End Role="Registration" EntitySet="BaseEntities" />
+          </AssociationSet>
+          <EntitySet Name="Teachers" EntityType="K_12Model.Teacher" />
+          <AssociationSet Name="FK_class_teacher" Association="K_12Model.FK_class_teacher">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="Class" EntitySet="Classes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teacher_staff" Association="K_12Model.FK_Teacher_staff">
+            <End Role="Staff" EntitySet="BaseEntities" />
+            <End Role="Teacher" EntitySet="Teachers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_staff_address" Association="K_12Model.FK_staff_address">
+            <End Role="Address" EntitySet="BaseEntities" />
+            <End Role="Staff" EntitySet="BaseEntities" />
+          </AssociationSet>
+          <AssociationSet Name="subject_grade" Association="K_12Model.subject_grade">
+            <End Role="Grade_Info" EntitySet="BaseEntities" />
+            <End Role="Subject" EntitySet="BaseEntities" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="BaseEntity" Abstract="true">
@@ -939,9 +982,8 @@
           <Property Name="Other_info" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Capacity" Type="Int32" />
           <Property Name="Current_students" Type="Int32" />
-          <NavigationProperty Name="Applications" Relationship="K_12Model.FK_Application_grade" FromRole="Grade_Info" ToRole="Application" />
           <NavigationProperty Name="Sections" Relationship="K_12Model.FK_section_grade" FromRole="Grade_Info" ToRole="Section" />
-          <NavigationProperty Name="Registrations" Relationship="K_12Model.FK_Registration_grade" FromRole="Grade_Info" ToRole="Registration" />
+          <NavigationProperty Name="Subjects" Relationship="K_12Model.subject_grade" FromRole="Grade_Info" ToRole="Subject" />
         </EntityType>
         <EntityType Name="PhoneBook" BaseType="K_12Model.BaseEntity">
           <Property Name="Address_id" Type="Int32" />
@@ -1233,13 +1275,6 @@
           <NavigationProperty Name="Grade" Relationship="K_12Model.FK_section_grade" FromRole="Section" ToRole="Grade_Info" />
           <NavigationProperty Name="student_section" Relationship="K_12Model.FK_student_section_section" FromRole="Section" ToRole="student_section" />
         </EntityType>
-        <EntityType Name="StaffClaim" BaseType="K_12Model.Person">
-          <Property Name="DOB" Type="DateTime" Precision="0" />
-          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="address_id" Type="Int32" />
-          <Property Name="StaffType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Address" Relationship="K_12Model.FK_staffclaim_address" FromRole="StaffClaim" ToRole="Address" />
-        </EntityType>
         <EntityType Name="student_section">
           <Key>
             <PropertyRef Name="student_id" />
@@ -1251,13 +1286,7 @@
         </EntityType>
         <EntityType Name="Subject" BaseType="K_12Model.BaseEntity">
           <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Teacher" BaseType="K_12Model.Person">
-          <Property Name="DOB" Type="DateTime" Precision="0" />
-          <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="address_id" Type="Int32" />
-          <NavigationProperty Name="Address" Relationship="K_12Model.FK_teacher_address" FromRole="Teacher" ToRole="Address" />
-          <NavigationProperty Name="Classes" Relationship="K_12Model.FK_class_teacher" FromRole="Teacher" ToRole="Class" />
+          <NavigationProperty Name="Grades" Relationship="K_12Model.subject_grade" FromRole="Subject" ToRole="Grade_Info" />
         </EntityType>
         <Association Name="FK_activity_class">
           <End Type="K_12Model.Class" Role="Class" Multiplicity="0..1" />
@@ -1270,30 +1299,6 @@
             <Dependent Role="Activity">
               <PropertyRef Name="section_id" />
               <PropertyRef Name="subject_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_staffclaim_address">
-          <End Type="K_12Model.Address" Role="Address" Multiplicity="0..1" />
-          <End Type="K_12Model.StaffClaim" Role="StaffClaim" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Address">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="StaffClaim">
-              <PropertyRef Name="address_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_teacher_address">
-          <End Type="K_12Model.Address" Role="Address" Multiplicity="0..1" />
-          <End Type="K_12Model.Teacher" Role="Teacher" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Address">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Teacher">
-              <PropertyRef Name="address_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1318,18 +1323,6 @@
             </Principal>
             <Dependent Role="Class">
               <PropertyRef Name="subject_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_class_teacher">
-          <End Type="K_12Model.Teacher" Role="Teacher" Multiplicity="0..1" />
-          <End Type="K_12Model.Class" Role="Class" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Teacher">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Class">
-              <PropertyRef Name="teacher_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1392,6 +1385,65 @@
               <PropertyRef Name="student_id" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Staff" BaseType="K_12Model.Person">
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="address_id" Type="Int32" />
+          <Property Name="StaffType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Address" Relationship="K_12Model.FK_staff_address" FromRole="Staff" ToRole="Address" />
+          <Property Name="Claim_Date" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Rating" Type="Int32" />
+          <NavigationProperty Name="Classes" Relationship="K_12Model.FK_class_teacher" FromRole="Teacher" ToRole="Class" />
+          <NavigationProperty Name="Staff" Relationship="K_12Model.FK_Teacher_staff" FromRole="Teacher" ToRole="Staff" />
+          <Property Name="isHomeRoom" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_class_teacher">
+          <End Type="K_12Model.Teacher" Role="Teacher" Multiplicity="0..1" />
+          <End Type="K_12Model.Class" Role="Class" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Class">
+              <PropertyRef Name="teacher_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teacher_staff">
+          <End Type="K_12Model.Staff" Role="Staff" Multiplicity="1" />
+          <End Type="K_12Model.Teacher" Role="Teacher" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Teacher">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_staff_address">
+          <End Type="K_12Model.Address" Role="Address" Multiplicity="0..1" />
+          <End Type="K_12Model.Staff" Role="Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="address_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="subject_grade">
+          <End Type="K_12Model.Grade_Info" Role="Grade_Info" Multiplicity="*" />
+          <End Type="K_12Model.Subject" Role="Subject" Multiplicity="*" />
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -1544,20 +1596,16 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
-            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.Teacher)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-              <MappingFragment StoreEntitySet="Teacher">
-		<ScalarProperty Name="ID" ColumnName="ID" />
-		<ScalarProperty Name="FName" ColumnName="FName" />
-		<ScalarProperty Name="MName" ColumnName="MName" />
-		<ScalarProperty Name="LName" ColumnName="LName" />
-		<ScalarProperty Name="Gender" ColumnName="Gender" />
-		<ScalarProperty Name="DOB" ColumnName="DOB" />
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="address_id" ColumnName="address_id" />
+            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.Section)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+              <MappingFragment StoreEntitySet="Section">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="grade_id" ColumnName="grade_id" />
               </MappingFragment>
             </EntityTypeMapping>
-            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.StaffClaim)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-              <MappingFragment StoreEntitySet="StaffClaim">
+            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.Staff)">
+              <MappingFragment StoreEntitySet="Staff">
+		<ScalarProperty Name="Claim_Date" ColumnName="Claim_Date" />
 		<ScalarProperty Name="ID" ColumnName="ID" />
 		<ScalarProperty Name="FName" ColumnName="FName" />
 		<ScalarProperty Name="MName" ColumnName="MName" />
@@ -1567,13 +1615,7 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="address_id" ColumnName="address_id" />
                 <ScalarProperty Name="StaffType" ColumnName="StaffType" />
-              </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="IsTypeOf(K_12Model.Section)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-              <MappingFragment StoreEntitySet="Section">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="grade_id" ColumnName="grade_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1647,6 +1689,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Teachers">
+            <EntityTypeMapping TypeName="K_12Model.Teacher">
+              <MappingFragment StoreEntitySet="Teacher">
+                <ScalarProperty Name="isHomeRoom" ColumnName="isHomeRoom" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="subject_grade" TypeName="K_12Model.subject_grade" StoreEntitySet="subject_grade">
+            <EndProperty Name="Subject">
+              <ScalarProperty Name="ID" ColumnName="subject_id" />
+            </EndProperty>
+            <EndProperty Name="Grade_Info">
+              <ScalarProperty Name="ID" ColumnName="grade_id" />
+            </EndProperty>
+          </AssociationSetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

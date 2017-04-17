@@ -1,0 +1,183 @@
+﻿@model K_12.Entity.Staff
+
+
+
+
+<text>
+    <script>
+
+        $(function () {
+            // yay!
+            setProgress(1)
+
+        });
+    </script>
+</text>
+
+@using (Ajax.BeginForm(
+                                                                "StaffInfo",
+                                                                null,
+
+                                                                new AjaxOptions()
+                                                                {
+
+                                                                    InsertionMode = InsertionMode.Replace,
+                                                                    UpdateTargetId = "staffRegistrationFormContent",
+                                                                    //OnSuccess = "onSuccess"
+                                                                    OnSuccess = "$('#staffRegistrationFormContent').hide().fadeIn('slow')"
+
+
+
+
+                                                                },
+                                                                new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                                                ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+
+
+
+
+
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Parent Info</legend>
+
+        <!-- Text input-->
+        <div class="form-group col-md-12">
+            <div class="col-sm-2">
+                @Html.LabelFor(m => m.FName, "Full Name", new { @class = "col-sm-4 control-label", style = "width:100%;" })
+            </div>
+
+            <div class="col-sm-3">
+                @*<span class="k-textbox k-space-right" style="width:100%;">*@
+                @Html.TextBoxFor(model => model.FName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "First Name" })
+                @*<a href="#" class="k-icon k-i-arrow-s">&nbsp;</a>*@
+                @*</span>*@
+                <span class="has-error">  @Html.ValidationMessageFor(model => model.FName) </span>
+            </div>
+
+
+            <div class="col-sm-3">
+                @Html.TextBoxFor(model => model.MName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Father Name" })
+            </div>
+
+            <div class="col-sm-3">
+                @Html.TextBoxFor(model => model.LName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "G.Father Name" })
+            </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group col-md-4">
+            @Html.LabelFor(m => m.DOB, "Birth Date", new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-4">
+                @* <input id="student_dob" name="student_dob" type="text" placeholder="DD/MM/YY" class="form-control input-md">*@
+                @(Html.Kendo().DatePickerFor(m => m.DOB)
+                .Start(CalendarView.Decade)
+                    .HtmlAttributes(new { PlaceHolder = "Birth Date" }))
+
+            </div>
+        </div>
+
+
+
+
+
+    </fieldset>
+
+
+    <fieldset>
+
+
+        <legend>Address</legend>
+
+        <div class="form-group">
+
+            <div class="col-sm-4">
+
+                @(Html.Kendo().ComboBoxFor(m => m.Address.Subcity)
+            .Placeholder("SubCity")
+            .BindTo(K_12.WEB.Utilities.DropLists.SubCityList)
+                )
+
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.TextBoxFor(model => model.Address.Woreda, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Woreda", @Type = "Number" })
+            </div>
+
+
+            <div class="col-sm-4">
+                @Html.TextBoxFor(model => model.Address.H_NO, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "House Number" })
+            </div>
+
+
+
+        </div>
+
+        <div class="form-group">
+
+
+            <div class="col-sm-4">
+                @Html.TextAreaFor(model => model.Address.Address_Detail, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "AddressDetail" })
+            </div>
+
+
+
+        </div>
+
+        <div class="form-group">
+
+
+            @Html.EditorFor(m => m.Address.PhoneBooks)
+
+
+        </div>
+
+
+        <div class="form-group">
+
+
+            <div class="col-sm-4">
+                @Html.TextBoxFor(model => model.Address.Email, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Email" })
+            </div>
+
+
+        </div>
+
+    </fieldset>
+
+
+
+
+
+
+        <!-- Button(Double) -->
+
+       <div class="row">
+          @Html.HiddenFor(m => m.ID)
+           
+       
+
+            <div class="col-sm-offset-8 col-sm-4 right">
+                @Html.Kendo().Button().Name("btnReset").Content("Reset").HtmlAttributes(new { @class = "k-button k-danger", type = "submit", name = "ButtonType", value = "Reset" })
+                @Html.Kendo().Button().Name("BtnNext").Content("Next").HtmlAttributes(new { @class = "k-button k-primary", type = "submit", name = "ButtonType", value = "Next" }).Icon("plus")
+            </div>
+        </div>
+
+
+
+}
+@*form end*@
+
+
+
+

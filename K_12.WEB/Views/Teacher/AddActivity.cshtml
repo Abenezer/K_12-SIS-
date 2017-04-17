@@ -1,0 +1,72 @@
+﻿@model K_12.Entity.Activity
+
+
+
+
+
+
+
+    @using (Ajax.BeginForm(
+                                                                                "AddActivity",
+                                                                                null,
+
+                                                                                new AjaxOptions()
+                                                                                {
+
+                                                                                  
+                                                                                    OnSuccess = "activityAdded"
+
+
+                                                                                },
+                                                                                new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                                                                ))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+
+
+        <div class="form-group row">
+            <label class="col-sm-4 control-label">Title</label>
+            <div class="col-sm-4">
+
+                @Html.TextBoxFor(model => model.Title, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Title" })
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-4 control-label">Description</label>
+            <div class="col-sm-4">
+
+                @Html.TextAreaFor(model => model.Description, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Description" })
+
+            </div>
+        </div>
+
+
+   
+        @Html.HiddenFor(m=>m.section_id)
+        @Html.HiddenFor(m => m.subject_id)
+
+
+
+    <!-- Button (Double) -->
+
+        <div class="row">
+
+            <div class="col-sm-offset-8 col-sm-4 right">
+                @Html.Kendo().Button().Name("rest_btn").Content("Cancel").HtmlAttributes(new { @class = "k-button k-danger", type = "reset", name = "ButtonType" })
+
+                @Html.Kendo().Button().Name("BtnAdd").Content("Add").HtmlAttributes(new { @class = "k-button k-primary", type = "submit", name = "ButtonType", value = "Add" }).Icon("plus")
+
+            </div>
+        </div>
+
+
+
+
+    }
+

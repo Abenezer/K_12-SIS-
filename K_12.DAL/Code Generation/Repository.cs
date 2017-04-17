@@ -32,12 +32,14 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     public void Delete(TEntity entity)
     {
         _entities.Remove(entity);
+      //  _context.Entry(entity).State = EntityState.Modified;
     }
 
-	public void Delete(object id)
+	public void Delete(params object[] keyValues)
     {
-        var entity = _entities.Find(id);
+        var entity = _entities.Find(keyValues);
         Delete(entity);
+       
     }
 
     public  TEntity Find(params object[] keyValues)

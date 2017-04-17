@@ -17,9 +17,8 @@ namespace K_12.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Grade_Info()
         {
-            this.Applications = new HashSet<Application>();
             this.Sections = new HashSet<Section>();
-            this.Registrations = new HashSet<Registration>();
+            this.Subjects = new HashSet<Subject>();
         }
     
         public string Grade { get; set; }
@@ -30,10 +29,8 @@ namespace K_12.Entity
         public Nullable<int> Current_students { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Application> Applications { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Section> Sections { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Registration> Registrations { get; set; }
+        public virtual ICollection<Subject> Subjects { get; set; }
     }
 }

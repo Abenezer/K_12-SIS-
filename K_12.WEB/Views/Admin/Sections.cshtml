@@ -15,7 +15,7 @@
             var list = $("#sectionList").data("kendoListView");
           
 
-            list.dataSource.read({ ID: value });
+            list.dataSource.read({ grade_id: value });
 
         }
 
@@ -69,7 +69,7 @@
 @Html.Kendo().Button().Name("addSection").Content("Add Section").Events(e => e.Click("addSection"))
 
 <div >
-    @(Html.Kendo().ListView<K_12.Entity.Section>()
+    @(Html.Kendo().ListView<K_12.WEB.Models.Registration.SectionViewModel>()
          .TagName("div")
     .Name("sectionList")
      .ClientTemplateId("template")

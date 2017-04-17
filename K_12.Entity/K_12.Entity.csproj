@@ -107,7 +107,7 @@
     <Compile Include="Section.cs">
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="StaffClaim.cs">
+    <Compile Include="Staff.cs">
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Student.cs">

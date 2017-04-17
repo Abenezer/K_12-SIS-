@@ -117,6 +117,31 @@ namespace K_12.UnitTest
 
         }
 
+        [TestMethod]
+        public void TestMultiKeys()
+        {
+            var context = new Entity.K_12Entities();
+            UnitOfWork uw = new UnitOfWork(context);
+            var cls = uw.Classs.Find(22, 21); //order matters 
+
+            Assert.IsNotNull(cls);
+
+        }
+
+
+        [TestMethod]
+        public void TestDelete()
+        {
+            var context = new Entity.K_12Entities();
+            UnitOfWork uw = new UnitOfWork(context);
+            uw.student_sections.Delete(7);
+
+            uw.Save();
+            Assert.IsNull(uw.student_sections.Find(7));
+
+        }
+
+
 
     }
 }

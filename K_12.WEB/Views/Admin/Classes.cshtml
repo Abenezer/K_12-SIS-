@@ -1,0 +1,200 @@
+﻿
+<text>
+
+    <script type="text/x-kendo-tmpl" id="subject_template">
+        <div class="subject_item">
+            <h3>#:Name#</h3>
+        </div>
+    </script>
+
+    <script id="noDataTemplate" type="text/x-kendo-tmpl">
+        <div>
+            No data found. Do you want to add new item - '#: instance.text() #' ?
+        </div>
+        <br />
+        <button class="k-button" onclick="addNew('#: instance.element[0].id #', '#: instance.text() #')">Add new item</button>
+    </script>
+
+    <script type="text/x-kendo-tmpl" id="class_template">
+        <div class="class_item">
+            <h3>#:SectionName#</h3>
+            <h3>#:TeacherName#</h3>
+        </div>
+    </script>
+
+    <script>
+
+      
+
+        function grade_selected(e) {
+            var value = $("#SelectedGrade").val();
+            var list = $("#subjectList").data("kendoListView");
+
+
+            list.dataSource.read({ ID: value });
+            $("#classList").data("kendoListView").dataSource.read();
+
+        }
+
+        function getGradeAndSubject()
+        {
+            var listView = $("#subjectList").data("kendoListView")
+
+            var index = listView.select().index(),
+            dataItem = listView.dataSource.view()[index];
+
+            return { grade_id: $("#SelectedGrade").val(), subject_id: dataItem.subject_id}
+        }
+
+        function SubjectSelected(e) {
+          
+           // var dataItem = this.dataItem(this.select());
+            var list = $("#classList").data("kendoListView");
+
+
+            list.dataSource.read(getGradeAndSubject());
+
+        }
+
+        function addClass(e) {
+            var subject = $("#subjectList").val();
+            e.preventDefault();
+            var wnd = $("#AddEditClassWindow").data("kendoWindow");
+            $.get('/Admin/AddEditClass/?subject_id=' + getGradeAndSubject().subject_id, function (data) {
+                wnd.title("Add Class");
+                wnd.content(data);
+                wnd.center().open();
+            });
+
+        }
+
+
+        function addSubject(e) {
+            e.preventDefault();
+           
+            var wnd = $("#AddSubjecWindow").data("kendoWindow");
+           
+                wnd.title("Add Subject");
+                    wnd.center().open();
+          
+
+        }
+
+        function addSubjectToList()
+        {
+            var id = $("#AllSubjectCombo").val();
+            var name = $("#AllSubjectCombo").data("kendoComboBox").text();
+            var grade = $("#SelectedGrade").val();
+            var list = $("#subjectList").data("kendoListView");
+         
+            list.dataSource.add({grade_id:grade, subject_id:id , Name: name });
+            list.dataSource.sync();
+            $("#AddSubjecWindow").data("kendoWindow").close();
+
+        }
+    </script>
+    </text>
+
+<div class="form-group row">
+    <label class="col-sm-4 control-label">Choose Grade</label>
+    <div class="col-sm-4">
+
+        @(Html.Kendo().ComboBox()
+        .Name("SelectedGrade")
+        .Placeholder("Grade")
+        .DataTextField("Grade")
+        .DataValueField("ID")
+        .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetGrades", "Admin"))
+                     )
+        .Events(e => e.Change("grade_selected"))
+        )
+
+    </div>
+
+
+</div>
+
+@Html.Kendo().Button().Name("addSubject").Content("Add Subject").Events(e => e.Click("addSubject"))
+<div>
+    <h3>Subjects</h3>
+    @(Html.Kendo().ListView<K_12.WEB.Models.Admin.SubjectListViewModel>()
+         .TagName("div")
+    .Name("subjectList")
+     .ClientTemplateId("subject_template")
+    .Selectable()
+    .Events(e => e.Change("SubjectSelected"))
+    .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetGradeSubjects", "Admin"))
+                     .Create(c => c.Action("addSubjectToGrade", "Admin"))
+                     .Model(m=>m.Id(s=>s.ID))
+                     )
+
+
+    )
+
+    <h3>Classes</h3>
+    @(Html.Kendo().ListView<K_12.WEB.Models.Admin.ClassListViewModel>()
+         .TagName("div")
+    .Name("classList")
+     .ClientTemplateId("class_template")
+    .Selectable()
+    .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetClassesBySubject", "Admin"))
+                     )
+
+
+    )
+
+
+</div>
+@Html.Kendo().Button().Name("addClass").Content("Add Class").Events(e => e.Click("addClass"))
+
+@(Html.Kendo().Window().Name("AddEditClassWindow")
+
+    .Visible(false)
+
+    .Modal(true)
+    .Draggable(true)
+    .Width(800)
+)
+
+@(Html.Kendo().Window().Name("AddSubjecWindow")
+
+    .Visible(false)
+    .Content(@<text>
+
+<div class="form-group row">
+    <label class="col-sm-4 control-label">Choose Grade</label>
+    <div class="col-sm-4">
+
+        @(Html.Kendo().ComboBox()
+        .Name("AllSubjectCombo")
+        .Placeholder("Subject")
+        .DataTextField("Name")
+        .DataValueField("ID")
+        .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetSubjects", "Admin"))
+                     )
+
+        )
+
+        @Html.Kendo().Button().Name("addSubjectList").Content("Add").Events(e => e.Click("addSubjectToList"))
+
+    </div>
+
+
+</div>
+
+
+
+
+
+</text>)
+    .Modal(true)
+    .Draggable(true)
+    .Width(800)
+)
+
+
+

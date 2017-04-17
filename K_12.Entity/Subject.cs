@@ -14,6 +14,15 @@ namespace K_12.Entity
     
     public partial class Subject : BaseEntity 
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Subject()
+        {
+            this.Grades = new HashSet<Grade_Info>();
+        }
+    
         public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Grade_Info> Grades { get; set; }
     }
 }

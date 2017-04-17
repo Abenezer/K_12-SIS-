@@ -1,0 +1,63 @@
+﻿@model K_12.WEB.Models.UserViewModel
+
+
+<text>
+    <script>
+
+        $(function () {
+            // yay!
+            setProgress(2)
+
+        });
+    </script>
+</text>
+
+@using (Ajax.BeginForm(
+                                                                "UserRegistration",
+                                                                null,
+
+                                                                new AjaxOptions()
+                                                                {
+
+                                                                    InsertionMode = InsertionMode.Replace,
+                                                                    UpdateTargetId = "staffRegistrationFormContent",
+                                                                    //OnSuccess = "onSuccess"
+                                                                    OnSuccess = "$('#staffRegistrationFormContent').hide().fadeIn('slow')"
+
+
+
+
+                                                                },
+                                                                new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                                                ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+
+
+
+
+@Html.Partial("_registrationPartial")
+
+        <div class="row">
+
+
+            <div class="col-sm-offset-8 col-sm-4 right">
+                @Html.Kendo().Button().Name("BtnPrevious").Content("Back").HtmlAttributes(new { @class = "k-button k-secondary", type = "submit", name = "ButtonType", value = "Back" })
+                @Html.Kendo().Button().Name("btnReset").Content("Reset").HtmlAttributes(new { @class = "k-button k-danger", type = "submit", name = "ButtonType", value = "Reset" })
+                @Html.Kendo().Button().Name("BtnNext").Content("Next").HtmlAttributes(new { @class = "k-button k-primary", type = "submit", name = "ButtonType", value = "Next" }).Icon("plus")
+            </div>
+        </div>
+
+
+
+}
+@*form end*@
+
+
+
+

@@ -1,0 +1,30 @@
+﻿
+
+<text>
+
+    <script type="text/x-kendo-tmpl" id="activityListTemplate">
+        <div class="activities">
+            <h3>#:Title#</h3>
+            <h3>#:Subject#</h3>
+        </div>
+    </script>
+ </text>
+
+
+
+
+    <div>
+        @(Html.Kendo().ListView<K_12.WEB.Models.Registration.StudentListViewModel>()
+         .TagName("div")
+    .Name("activityList")
+     .ClientTemplateId("activityListTemplate")
+    .Selectable()
+    .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetStudentActivities", "Parent").Data("getSection"))
+                     )
+
+
+        )
+
+
+    </div>

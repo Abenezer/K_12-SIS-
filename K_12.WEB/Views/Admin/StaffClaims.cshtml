@@ -1,0 +1,51 @@
+﻿
+<text>
+
+    <script type="text/javascript">
+        function Staff_OnRowSelect(e) {
+            var dataItem = this.dataItem(this.select());
+            $.get('/Admin/StaffClaimDetail/' + dataItem.ID, function (data) {
+
+
+                $('#staffDetailContent').html(data);
+
+                $('#staffDetailContent').fadeIn('slow');
+            });
+
+        }
+
+        function reload_grid() {
+            var grid = $("#StaffClaimGrid").data("kendoGrid");
+            grid.dataSource.read(); // rebind the Grid's DataSource
+        }
+
+    </script>
+
+</text>
+
+
+<h1>Pending Staff Claims</h1>
+@(Html.Kendo().Grid<K_12.WEB.Models.Staff.StaffListViewModel>()
+    .Name("StaffClaimGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(a => a.FullName).Groupable(false);
+        columns.Bound(a => a.ClaimDate);
+        columns.Bound(a => a.StaffType);
+    })
+    .Pageable()
+    .Selectable()
+    .Sortable()
+    .Events(events => events.Change("Staff_OnRowSelect"))
+    .Filterable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("GetPendingStaffs", "Staff"))
+        .ServerOperation(false)
+    )
+)
+
+
+<div id="staffDetailContent">
+
+</div>

@@ -142,11 +142,7 @@
 
                 @(Html.Kendo().ComboBoxFor(m => m.Parent.Address.Subcity)
             .Placeholder("SubCity")
-            .BindTo(new string[] {
-                "Yeka",
-                "Bole",
-                "Arada"
-             })
+            .BindTo(K_12.WEB.Utilities.DropLists.SubCityList)
                 )
 
 

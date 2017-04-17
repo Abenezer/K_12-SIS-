@@ -12,12 +12,14 @@ namespace K_12.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class StaffClaim : Person 
+    public partial class Staff : Person 
     {
         public Nullable<System.DateTime> DOB { get; set; }
         public string Status { get; set; }
         public Nullable<int> address_id { get; set; }
         public string StaffType { get; set; }
+        public string user_id { get; set; }
+        public Nullable<System.DateTime> Claim_Date { get; set; }
     
         public virtual Address Address { get; set; }
     }

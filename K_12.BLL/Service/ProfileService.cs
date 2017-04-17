@@ -19,9 +19,9 @@ namespace K_12.BLL.Service
     public class ProfileService: IProfileService
     {
 
-        public ProfileService(ParentService parentSerive)
+        public ProfileService(IUnitOfWork uw)
         {
-            _parentService = parentSerive;
+            _parentService = new ParentService(uw.Parents);
         }
 
         private IParentService _parentService; 

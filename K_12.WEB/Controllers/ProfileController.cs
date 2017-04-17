@@ -10,20 +10,25 @@ using K_12.WEB.Utilities;
 
 namespace K_12.WEB.Controllers
 {
-    [Authorize(Roles = "Parent")]
+    [Authorize(Roles = "Parent,Teacher")]
     public class ProfileController : Controller
     {
 
-        protected readonly IProfileService _service;
+
         private readonly IUnitOfWork _unitOfWork;
 
         public ProfileController(
-           IUnitOfWork unitOfWork,
-           IProfileService service)
+           IUnitOfWork unitOfWork
+          )
         {
             _unitOfWork = unitOfWork;
-            _service = service;
+
+
+
         }
+
+
+
 
 
 
@@ -31,58 +36,70 @@ namespace K_12.WEB.Controllers
         [Authorize(Roles = "")]
         public ActionResult Index()
         {
-           
+
             return View();
         }
 
-       
+
         public ActionResult Main()
         {
             return View();
         }
 
 
-        private Entity.Parent CurrentParent
+
+
+        public ActionResult LeftMenu()
         {
-            get
-            {
-
-                if (Session["current_parent_profile"] == null)
-                {
-
-                    Session["current_parent_profile"] = _service.ParentService.GetParentByUserID(User.Identity.GetUserId());
-                }
-                return (Entity.Parent)Session["current_parent_profile"];
-
-
-            }
-
-           }
-
-
-        public ActionResult LeftMenu() 
-        {            
             if (User.IsInRole("Parent"))
             {
-                
-                return PartialView("_side_menu", new Models.Profile.SideMenuViewModel() { Students = CurrentParent.Students.GetStudentNames().ToDropDownList() }); 
+                var currentParent = _unitOfWork.Parents.GetByUserId(User.Identity.GetUserId());
+
+                return PartialView("_side_menu", new Models.Profile.SideMenuViewModel()
+                {
+                    MainListText = "Students",
+
+                    MainListItems = currentParent.Students.GetStudentNames().Select(s => new Models.Profile.MenuItem
+                    {
+
+                        Text = s.Value,
+                        URL = "#/student/" + s.Key,
+                    })
+                }
+
+                );
             }
 
+            if (User.IsInRole("Teacher"))
+            {
+                var currentTeacher = _unitOfWork.Teachers.GetByUserId(User.Identity.GetUserId());
+
+                return PartialView("_side_menu", new Models.Profile.SideMenuViewModel()
+                {
+                    MainListText = "Classes",
+
+                    MainListItems = currentTeacher.Classes.Select(c => new Models.Profile.MenuItem
+                    {
+
+                        Text = c.Section.Name + " " + c.Subject.Name,
+                        URL = "#/class/" + c.section_id + "/" + c.subject_id,
+                    })
+                }
+
+                );
+            }
 
             return PartialView("_side_menu");
         }
 
-        public ActionResult GetStudentList()
-        {
-            return Json(CurrentParent.Students.GetStudentNames().ToDropDownList(), JsonRequestBehavior.AllowGet);
-        }
+
 
         public ActionResult ActionMenu()
         {
             if (User.IsInRole("Parent"))
             {
 
-               
+
             }
 
 

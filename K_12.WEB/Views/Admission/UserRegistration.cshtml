@@ -41,60 +41,7 @@
 
 
 
-
-    <fieldset>
-
-        <!-- Form Name -->
-        <legend>User Info</legend>
-
-        <!-- Text input-->
-        <div class="form-group">
-         
-                @Html.LabelFor(m => m.Username, "UserName", new { @class = "col-sm-4 control-label" })
-         
-
-            <div class="col-sm-4">
-            
-                @Html.TextBoxFor(model => model.Username, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "UserName" })
-             
-                <span class="has-error">  @Html.ValidationMessageFor(model => model.Password) </span>
-            </div>
-                 
-        </div>
-
-   
-        <div class="form-group">
-            @Html.LabelFor(m => m.Password, "Password", new { @class = "col-sm-4 control-label" })
-            <div class="col-sm-4">
-
-                @Html.TextBoxFor(model => model.Password, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Password ", Type="Password" })
-
-                <span class="has-error">  @Html.ValidationMessageFor(model => model.Password) </span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Password2, "Re Password", new { @class = "col-sm-4 control-label" })
-            <div class="col-sm-4">
-
-                @Html.TextBoxFor(model => model.Password2, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Retype Password ", Type = "Password" })
-
-                <span class="has-error">  @Html.ValidationMessageFor(model => model.Password2) </span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Email, "Email", new { @class = "col-sm-4 control-label" })
-            <div class="col-sm-4">
-
-                @Html.TextBoxFor(model => model.Email, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Email" })
-
-                <span class="has-error">  @Html.ValidationMessageFor(model => model.Email) </span>
-            </div>
-        </div>
-
-
-    </fieldset>
+@Html.Partial("_registrationPartial")
 
         <div class="row">
 

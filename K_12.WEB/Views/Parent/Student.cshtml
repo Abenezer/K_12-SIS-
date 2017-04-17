@@ -1,0 +1,24 @@
+﻿@model K_12.WEB.Models.Parent.StudentViewModel
+
+<text>
+    <script type="text/javascript">
+        function activitiesBtn(e)
+        {
+            $.get("/Parent/StudentActivities", function(data){
+                $('#studentItemscontainer').html(data);
+            });
+        }
+
+        function getSection()
+        {
+            return {section_id:@Model.section_id }
+        }
+    </script>
+
+</text>
+
+
+<div id="studentItemscontainer">
+
+    @(Html.Kendo().Button().Name(Model.section_id + "btn").Content("Activities").Events(e => e.Click("activitiesBtn")))
+</div>

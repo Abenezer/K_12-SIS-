@@ -15,6 +15,8 @@ namespace K_12.WEB.Utilities
 
         public readonly static  string[] NationalityList;
 
+        public readonly static string[] SubCityList;
+
         public readonly static ICollection<DropDownListItem> AdmisionMethodList; 
 
         
@@ -37,6 +39,12 @@ namespace K_12.WEB.Utilities
             NationalityList = JsonConvert.DeserializeObject<string[]>(
                  File.ReadAllText(Path.Combine(path, "Nationalities.json"))
                 );
+
+
+          SubCityList = JsonConvert.DeserializeObject<string[]>(
+               File.ReadAllText(Path.Combine(path, "SubCities.json"))
+              );
+
 
 
         }

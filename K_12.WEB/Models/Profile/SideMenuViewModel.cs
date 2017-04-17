@@ -9,8 +9,9 @@ namespace K_12.WEB.Models.Profile
 {
     public class SideMenuViewModel
     {
-        public ICollection<DropDownListItem>  Students { get; set; }
-        
+        public IEnumerable<MenuItem> MainListItems { get; set; }
+
+        public  string  MainListText { get; set; }
 
     }
 }

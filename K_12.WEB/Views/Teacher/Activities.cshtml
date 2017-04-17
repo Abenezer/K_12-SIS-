@@ -1,0 +1,66 @@
+﻿
+
+
+<text>
+
+    <script type="text/x-kendo-tmpl" id="activityListTemplate">
+        <div class="activities">
+            <h3>#:Title#</h3>
+        </div>
+    </script>
+
+
+    
+
+    <script type="text/javascript">
+        function addActivityBtnClicked(e)
+        {
+            e.preventDefault();
+            var wnd = $("#addActivityWindow").data("kendoWindow");
+            $.get('/Teacher/AddActivity/?section_id=' + getClass().section_id + '&&subject_id=' + getClass().subject_id, function (data) {
+                wnd.title("Add Activity");
+                wnd.content(data);
+                wnd.center().open();
+            });
+
+        }
+
+        function activityAdded()
+        {
+            $("#addActivityWindow").data("kendoWindow").close();
+
+            $("#activityList").data("kendoListView").dataSource.read();
+        }
+    </script>
+
+</text>
+
+
+
+<div>
+    @(Html.Kendo().ListView<K_12.WEB.Models.Registration.StudentListViewModel>()
+         .TagName("div")
+    .Name("activityList")
+     .ClientTemplateId("activityListTemplate")
+    .Selectable()
+    .DataSource(dataSource => dataSource
+                     .Read(read => read.Action("GetActivities", "Teacher").Data("getClass"))
+                     )
+
+
+    )
+
+
+</div>
+
+@(Html.Kendo().Button().Name("addActivityBtn").Content("Add Activity").Events(e=>e.Click("addActivityBtnClicked")))
+
+    
+    @(Html.Kendo().Window().Name("addActivityWindow")
+        .Visible(false)
+
+    .Modal(true)
+    .Draggable(true)
+    .Width(800)
+)
+

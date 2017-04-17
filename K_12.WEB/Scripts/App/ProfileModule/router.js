@@ -12,6 +12,19 @@ define(['kendo_mvc'],
             });
         });
 
+        router.route("/class/:section_id/:subject_id", function (section_id,subject_id) {
+            require(['text!/Teacher/Classes?section_id='+section_id+"&&subject_id="+subject_id], function (view) {
+                loadView(null, view);
+            });
+        });
+
+
+        router.route("/student/:id", function (student_id) {
+            require(['text!/Parent/Student/'+student_id], function (view) {
+                loadView(null, view);
+            });
+        });
+
       
 
         var loadView = function (viewModel, view, delegate) {

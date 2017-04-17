@@ -37,4 +37,24 @@ namespace K_12.BLL.Constants
         public static readonly string CONFIRMED = "Confirmed";
       
     }
+
+
+    public static class StaffTypes
+    {
+        public static readonly string[] avarailbleStaffTypes = { "Teacher", "UnitLeader" };
+
+        public static readonly string TEACHER = "Teacher";
+        public static readonly string UNIT_LEADER = "UnitLeader";
+    }
+
+    public static class StaffStatus
+    {
+        public static readonly string[] avarailbleStatuses = { "Pending", "Confirmed" };
+
+        public static readonly string PENDING = "Pending";
+        public static readonly string CONFIRMED = "Confirmed";
+
+    }
+
+
 }

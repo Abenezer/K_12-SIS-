@@ -75,7 +75,27 @@ define(['kendo_mvc'],
                 loadView(null, view);
             });
         });      
+    router.route("/Staff/Claim", function () {
+        require(['text!/Staff/Claim'], function (view) {
+                loadView(null, view);
+            });
+    });
 
+            router.route("/Staff/Register", function () {
+        require(['text!/Staff/Register/20'], function (view) {
+                loadView(null, view);
+            });
+        });   
+            router.route("/Admin/StaffClaims", function () {
+                require(['text!/Admin/StaffClaims'], function (view) {
+                loadView(null, view);
+            });
+        });   
+            router.route("/Admin/Classes", function () {
+                require(['text!/Admin/Classes'], function (view) {
+                loadView(null, view);
+            });
+        });
         var loadView = function (viewModel, view, delegate) {
             var kendoView = new kendo.View(view, { model: viewModel });
             kendo.fx($("#content")).slideInRight().reverse().then(function () {

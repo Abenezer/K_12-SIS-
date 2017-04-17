@@ -3,6 +3,8 @@
 
 <text>
     <script type="text/javascript">
+        var isDirty = false;
+
         function addBtnClikced()
         {
             var dataSource = $("#section1StudentList").data("kendoListView").dataSource;
@@ -16,6 +18,7 @@
             for (i = 0; i < selections.length; i++) {
                 var currentIndex = items.index(selections[i]);
                 var dataItem = listView.dataSource.view()[currentIndex];
+                delete dataItem.ID;
                 console.log(dataItem);
                 dataSource.add(dataItem);
                 listView.dataSource.remove(dataItem);
@@ -23,11 +26,46 @@
 
             dataSource.sync();
             
-    
+            isDirty = true;
+
+        }
+
+        function removeBtnClikced() {
+
+            var sectionView = $("#section1StudentList").data("kendoListView");
+            var dataSource = sectionView.dataSource;
+            var listView = $("#unassingedStudentList").data("kendoListView")
+
+            //var index = listView.select().index(),
+            //      dataItem = listView.dataSource.view()[index];
+
+            var items = sectionView.items(),
+                selections = items.select();
+            for (i = 0; i < selections.length; i++) {
+                var currentIndex = items.index(selections[i]);
+                var dataItem = sectionView.dataSource.view()[currentIndex];
+              //  delete dataItem.ID;
+                console.log(dataItem);
+                dataSource.remove(dataItem);
+                listView.dataSource.add(dataItem);
+            }
+
+            dataSource.sync();
+
+            isDirty = true;
 
         }
 
         function grade_selected(e) {
+
+            if (isDirty)
+            {
+                var wnd = $("#ConfirmSave").data("kendoWindow").center().open()
+            
+            }
+
+
+
             var value = $("#grade_id").val();
 
 
@@ -64,15 +102,14 @@
 
         }
 
-        function saveBtnClicked()
+        function saveBtnClikced(e)
         {
-            $.post("ajax/test.html", function (data) {
+            $.post("Registration/SaveSection", function (data) {
 
                 var popupNotification = $("#popupNotification").data("kendoNotification");
-                var d = new Date();
-                popupNotification.show("Saved");
+                    popupNotification.show("Saved");
 
-                $(".result").html(data);
+         
             });
 
 
@@ -159,7 +196,9 @@
                      .Batch(true)
                      .ServerOperation(false)
                      .Read(read => read.Action("GetSectionStudents", "Registration"))
+                     .Model(m => m.Id(s => s.ID))
                      .Create(create => create.Action("AddStudentToSection", "Registration").Data("sectionGradeData"))
+                     .Destroy(del => del.Action("RemoveStudentFromSection","Registration").Data("sectionGradeData"))
 
                      )
 
@@ -170,8 +209,24 @@
 
 @Html.Kendo().Button().Name("addBtn").Content("Add").Events(e=>e.Click("addBtnClikced"))
 
+@Html.Kendo().Button().Name("removeBtn").Content("Remove").Events(e => e.Click("removeBtnClikced"))
 @Html.Kendo().Button().Name("saveBtn").Content("Save").Events(e => e.Click("saveBtnClikced"))
 
 @(Html.Kendo().Notification()
     .Name("popupNotification")
 )
+
+
+
+@(Html.Kendo().Window().Name("ConfirmSave")
+
+    .Visible(false)
+    .Content(@<text><p>Do You Want to save Changes?<p>
+    @Html.Kendo().Button().Name("yesBtn").Events(e=>e.Click("saveBtnClikced")).Content("Save")
+    
+    </text>)
+    .Modal(true)
+    .Draggable(true)
+    .Width(800)
+)
+

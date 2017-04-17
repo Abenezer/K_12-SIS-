@@ -1,0 +1,24 @@
+﻿@model K_12.WEB.Models.Teacher.ClassListViewModel 
+
+<text>
+    <script type="text/javascript">
+        function activitiesBtn(e)
+        {
+            $.get("/Teacher/Activities", function(data){
+                $('#classItemscontainer').html(data);
+            });
+        }
+
+        function getClass()
+        {
+            return {section_id:@Model.section_id, subject_id:@Model.subject_id }
+        }
+    </script>
+
+</text>
+
+
+<div id="classItemscontainer">
+
+    @(Html.Kendo().Button().Name(Model.section_id+"btn"+Model.subject_id).Content("Activities").Events(e => e.Click("activitiesBtn")))
+</div>

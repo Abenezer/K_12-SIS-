@@ -31,5 +31,6 @@ namespace K_12.Entity
         public virtual DbSet<Language> Languages { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
         public virtual DbSet<student_section> student_section { get; set; }
+        public virtual DbSet<Teacher> Teachers { get; set; }
     }
 }

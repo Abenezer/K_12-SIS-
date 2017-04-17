@@ -12,7 +12,7 @@ public interface IUnitOfWork : IDisposable
     IApplicationRepository Applications { get; }
     ITeacherRepository Teachers { get; }
     ISubjectRepository Subjects { get; }
-    IStaffclaimRepository StaffClaims { get; }
+    IStaffRepository Staffs { get; }
     IPersonRepository Persons { get; }
     IParentRepository Parents { get; }
     IActivityRepository Activitys { get; }

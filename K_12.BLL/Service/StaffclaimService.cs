@@ -1,17 +1,26 @@
-    
+
 using K_12.Entity;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace K_12.BLL.Service
 {
      
-	 public interface IStaffclaimService : IService<StaffClaim>
+	 public interface IStaffService : IService<Staff>
     {
 
-
+        IQueryable<Staff> GetPendingStaffs();
     }
-    public class StaffclaimService : Service<StaffClaim>, IStaffclaimService
+    public class StaffService : Service<Staff>, IStaffService
     {
-        public StaffclaimService(IStaffclaimRepository repository) : base(repository)
+        public StaffService(IStaffRepository repository) : base(repository)
         {
+        }
+
+        public IQueryable<Staff> GetPendingStaffs ()
+        {
+           return  Queryable().Where(s => s.Status == Constants.StaffStatus.PENDING);
+            
         }
     }
 	 

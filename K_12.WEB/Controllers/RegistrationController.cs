@@ -33,6 +33,7 @@ namespace K_12.WEB.Controllers
         // GET: Registration
         public ActionResult Index()
         {
+            Session.Clear();
             return View();
         }
 
@@ -81,10 +82,13 @@ namespace K_12.WEB.Controllers
         {
             if (grade != null)
             {
-                var json = JsonConvert.SerializeObject(_service.GetRegisteredStudents(grade.Value).Where(s => s.student_section == null).Select(s => new Models.Registration.StudentListViewModel()
+                var json = JsonConvert.SerializeObject(_service.GetRegisteredStudents(grade.Value).Where(s => s.student_section == null).Select(sel => new Models.Registration.StudentListViewModel
                 {
-                    ID = s.ID,
-                    FullName = s.FName + " " + s.MName
+                   
+                    ID = sel.LName,
+                    student_id = sel.ID,
+                    
+                    FullName = sel.FName + " " + sel.MName
                     //TO-DO PhotoPath =
 
 
@@ -101,8 +105,20 @@ namespace K_12.WEB.Controllers
         }
 
 
+        private ICollection<int> RemovedStudents
+        {
+            get
+            {
+                if(Session["Removed_students"]==null)
 
+                {
+                    Session["Removed_students"] = new HashSet<int>();
+                }
 
+                return (ICollection<int>)Session["Removed_students"];
+
+            }
+        }
 
 
         private ICollection<Models.Registration.SectionViewModel> GetCurrentSections(int? selected_grade) 
@@ -115,7 +131,8 @@ namespace K_12.WEB.Controllers
                     ID = s.ID,
                     Name = s.Name,
                     Students = s.student_section.Select(std => new Models.Registration.StudentListViewModel() {
-                        ID = std.Student.ID,
+                        student_id= std.Student.ID,
+                        section_id= s.ID,
                         FullName = std.Student.FName + " " + std.Student.MName,
                         //  PhotoPath =  
                     }).ToList()
@@ -138,7 +155,7 @@ namespace K_12.WEB.Controllers
         {
             if (ID != null)
             {
-                var json = JsonConvert.SerializeObject(_unitOfWork.Grade_Infos.Find(ID).Sections, Formatting.Indented,
+                var json = JsonConvert.SerializeObject(_unitOfWork.Grade_Infos.Find(ID).Sections.Select(s=>new {s.ID,s.Name}), Formatting.Indented,
                               new JsonSerializerSettings
                               {
                                   ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -193,6 +210,59 @@ namespace K_12.WEB.Controllers
         }
 
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult RemoveStudentFromSection([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")]IEnumerable<Models.Registration.StudentListViewModel> students, int? grade_id, int? section_id)
+        {
+            var results = new List<Models.Registration.StudentListViewModel>();
+
+            if (students != null && ModelState.IsValid)
+            {
+                foreach (var student in students)
+                {
+                   var obj =  GetCurrentSections(grade_id).Where(s => s.ID == section_id).First().Students.Where(std => std.student_id == student.student_id).First();
+
+                    GetCurrentSections(grade_id).Where(s => s.ID == section_id).First().Students.Remove(obj);
+                    RemovedStudents.Add(student.student_id);
+
+
+                   results.Add(student);
+                }
+            }
+
+            return Json(results.ToDataSourceResult(request, ModelState));
+        }
+
+
+
+        [HttpPost]
+        public async Task<ActionResult> SaveSection (int? grade_id)
+        {
+            foreach (var section in GetCurrentSections(grade_id))
+            {
+                foreach (var student in section.Students)
+                {
+                    _unitOfWork.student_sections.Add(new student_section() { section_id = section.ID, student_id = student.student_id});
+
+                }
+                
+            }
+
+            foreach (int id in RemovedStudents)
+            {
+                _unitOfWork.student_sections.Delete(id);
+            }
+
+            try
+            {
+              //  _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+            }
+            return Content("");
+        }
 
 
     }

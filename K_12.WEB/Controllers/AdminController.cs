@@ -17,11 +17,13 @@ namespace K_12.WEB.Controllers
     {
         protected readonly IApplicationService _applicationService; 
         private readonly IUnitOfWork _unitOfWork;
+        protected readonly IStaffService _staffService;
 
-        public AdminController(IUnitOfWork unitofwork, IApplicationService applicationservice)
+        public AdminController(IUnitOfWork unitofwork)
         {
             _unitOfWork = unitofwork;
-            _applicationService = applicationservice; 
+            _applicationService = new ApplicationService(_unitOfWork.Applications);
+            _staffService = new StaffService(_unitOfWork.Staffs); 
         }
 
         // GET: Admin
@@ -117,11 +119,16 @@ namespace K_12.WEB.Controllers
             return View();
         }
 
-        public ActionResult GetGradeSections(int? ID, [DataSourceRequest] DataSourceRequest request)
+        public ActionResult GetGradeSections(int? grade_id, [DataSourceRequest] DataSourceRequest request)
         {
-            if (ID != null)
+            if (grade_id != null)
             {
-                var json = JsonConvert.SerializeObject(_unitOfWork.Grade_Infos.Find(ID).Sections.ToDataSourceResult(request), Formatting.Indented,
+                var json = JsonConvert.SerializeObject(_unitOfWork.Grade_Infos.Find(grade_id).Sections.Select(s=> new Models.Registration.SectionViewModel{
+               ID = s.ID,
+               Name = s.Name
+
+
+                }).ToDataSourceResult(request), Formatting.Indented,
                               new JsonSerializerSettings
                               {
                                   ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -132,12 +139,32 @@ namespace K_12.WEB.Controllers
 
             return Content("");
 
-
-
-      
+            
          
         }
 
+        public ActionResult GetTeachers()
+        {
+
+            var json = JsonConvert.SerializeObject(_unitOfWork.Teachers.Queryable().Select(t => new Models.Staff.StaffListViewModel()
+            {
+                FullName = t.Staff.FName + " " + t.Staff.MName,
+                ID = t.ID,
+                StaffType = t.Staff.StaffType,
+                  
+                
+                })
+                    
+                  , Formatting.Indented,
+                              new JsonSerializerSettings
+                              {
+                                  ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                              });
+
+                return Content(json, "application/json");
+           
+
+        }
 
         public ActionResult AddSection(int? grade_id)
         {
@@ -177,5 +204,212 @@ namespace K_12.WEB.Controllers
         }
 
 
+        public ActionResult StaffClaims()
+        {
+            return View();
+        }
+
+
+        public ActionResult StaffClaimDetail(int ID)
+        {
+
+
+            return View(_staffService.Find(ID));
+        }
+
+        public async Task<ActionResult> ConfirmStaff(Entity.Staff staff)
+        {
+
+            staff = _unitOfWork.Staffs.Find(staff.ID);
+
+
+            staff.Status = BLL.Constants.StaffStatus.CONFIRMED;
+            _staffService.Update(staff);
+            //if (staff.StaffType == BLL.Constants.StaffTypes.TEACHER)
+            //{
+            //    var teacher = new Entity.Teacher();
+            //    teacher.Staff = staff; 
+            //     _unitOfWork.Teachers.Add(teacher);
+            //}
+            
+          
+
+            
+            try
+            {
+                await _unitOfWork.SaveAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+            }
+            return Content("");
+        }
+
+        public ActionResult GetGrades()
+        {
+            IQueryable<Models.GradeViewModel> grades = _unitOfWork.Grade_Infos.Queryable()
+                .Select(g => new Models.GradeViewModel()
+                {
+                    ID = g.ID,
+                    Grade = g.Grade
+
+
+                });
+
+            return Json(grades, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult GetGradeSubjects(int? ID, [DataSourceRequest] DataSourceRequest request)
+        {
+            if (ID != null)
+            {
+                var json = JsonConvert.SerializeObject(_unitOfWork.Grade_Infos.Find(ID).Subjects.Select(s=> new Models.Admin.SubjectListViewModel() {
+
+                    grade_id = ID,
+                    subject_id = s.ID,
+                    Name = s.Name,
+                    
+                }).ToDataSourceResult(request), Formatting.Indented,
+                              new JsonSerializerSettings
+                              {
+                                  ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                                  
+                              });
+
+                return Content(json, "application/json");
+            }
+
+            return Content("");
+            
+        }
+
+
+        public ActionResult GetSubjects()
+        {
+            return Json(_unitOfWork.Subjects.Queryable().Select(s => new { s.ID, s.Name }),JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult GetClassesBySection(int? section_id, [DataSourceRequest] DataSourceRequest request)
+        {
+            IEnumerable<Entity.Class> classes;
+            if(section_id!=null)
+            {
+                classes = _unitOfWork.Classs.getBySection(section_id.Value);
+
+            }
+            else { classes = _unitOfWork.Classs.GetAll(); }
+
+            var json = JsonConvert.SerializeObject(classes.ToDataSourceResult(request), Formatting.Indented,
+                             new JsonSerializerSettings
+                             {
+                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                             });
+
+            return Content(json, "application/json");
+
+        }
+
+        public ActionResult GetClassesBySubject(int? subject_id, int? grade_id ,[DataSourceRequest] DataSourceRequest request)
+        {
+            IEnumerable<Models.Admin.ClassListViewModel> classes;
+            if (subject_id != null && grade_id!=null)
+            {
+                classes = _unitOfWork.Classs.getBySubjectAndGrade(subject_id.Value, grade_id.Value).Select(c=> new Models.Admin.ClassListViewModel() {
+                    section_id = c.section_id,
+                    subject_id = c.subject_id,
+                    SectionName = c.Section.Name,
+                    TeacherName = c.Teacher.Staff.FName + " " + c.Teacher.Staff.MName
+                    
+
+                });
+
+            }
+            else { classes = new HashSet<Models.Admin.ClassListViewModel> (); }
+
+            var json = JsonConvert.SerializeObject(classes.ToDataSourceResult(request), Formatting.Indented,
+                             new JsonSerializerSettings
+                             {
+                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                             });
+
+            return Content(json, "application/json");
+
+        }
+
+      
+
+        public ActionResult Classes ()
+        {
+            return View();
+        }
+
+        public ActionResult AddEditClass(int? subject_id, int? section_id)
+        {
+          
+            if (subject_id!=null&&section_id!=null)
+            {
+                Entity.Class cls = _unitOfWork.Classs.Find(section_id,subject_id); 
+                if(cls!=null)
+                {
+                    return View(cls);
+                }
+            }
+
+            return View(new Entity.Class() { subject_id = subject_id.Value});
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddEditClass(Entity.Class cls)
+        {
+         
+                if (_unitOfWork.Classs.Find(cls.section_id, cls.subject_id) != null)
+                    _unitOfWork.Classs.Update(cls);
+                else
+                    _unitOfWork.Classs.Add(cls);
+                try
+                {
+                    await _unitOfWork.SaveAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+
+                }
+
+                return Json("");
+            
+
+        }
+
+
+
+        [HttpPost]
+       public async Task<ActionResult> addSubjectToGrade(Models.Admin.SubjectListViewModel subjectModel)
+        {
+            if(subjectModel.grade_id != null)
+            {
+                Entity.Subject subject = _unitOfWork.Subjects.Find(subjectModel.subject_id);
+             
+                if(subject==null)
+                {
+                    subject = new Entity.Subject() { Name = subjectModel.Name };
+                }
+
+
+                _unitOfWork.Grade_Infos.Find(subjectModel.grade_id).Subjects.Add(subject);
+                try
+                {
+                    await _unitOfWork.SaveAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+
+                }
+            }
+
+            return Json(subjectModel);
+        }
     }
 }

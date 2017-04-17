@@ -8,7 +8,7 @@ public interface IRepository<T> where T : class
     void Add(T entity);
     void Delete(T entity);
 
-	 void Delete(object id);
+	 void Delete(params object[] keyValues);
 
 
     T Find(params object[] keyValues);

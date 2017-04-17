@@ -1,0 +1,48 @@
+﻿@model K_12.Entity.Staff 
+@using K_12.Entity
+
+
+
+
+@using (Ajax.BeginForm(
+                                                                                        "ConfirmStaff",
+                                                                                        null,
+
+                                                                                        new AjaxOptions()
+                                                                                        {
+
+                                                                                            InsertionMode = InsertionMode.Replace,
+                                                                                            UpdateTargetId = "staffDetailContent",
+                                                                                            //OnSuccess = "onSuccess",
+                                                                                            OnSuccess = "reload_grid"
+
+
+                                                                                        },
+                                                                                        new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                                                                        ))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <h3>@Model.GetFullName()</h3>
+    <h3>@Model.Gender</h3>
+
+
+
+
+
+
+    <div class="row">
+
+        @Html.HiddenFor(a => a.ID);
+        <div class="col-sm-offset-8 col-sm-4 right">
+        
+            @Html.Kendo().Button().Name("btnReject").Content("Reject").HtmlAttributes(new { @class = "k-button k-danger", Type = "submit", name = "ButtonType",  value = "Reject" })
+            @Html.Kendo().Button().Name("btnConfirm").Content("Confirm").HtmlAttributes(new { @class = "k-button k-success", Type = "submit", name = "ButtonType", value = "Confirm" })
+        
+        </div>
+    </div>
+
+}

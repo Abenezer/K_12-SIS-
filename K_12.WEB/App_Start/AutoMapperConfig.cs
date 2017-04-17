@@ -22,7 +22,10 @@ namespace K_12.WEB.App_Start
 
                 cfg.CreateMap<Entity.Student, Models.Admission.StudentInfoViewModel>().ReverseMap();
 
-             
+                cfg.CreateMap<Models.Staff.StaffClaimViewModel, Entity.Staff>()
+                   .ForMember(dest => dest.Address,
+               opts => opts.MapFrom(src => new Entity.Address() { Email = src.Email }))
+                .AfterMap((srs, dest) => dest.Address.PhoneBooks.Add(new Entity.PhoneBook { Phone = srs.MobilePhone, Type= "Mobile"}));
 
 
             });

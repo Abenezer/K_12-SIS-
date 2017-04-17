@@ -1,0 +1,179 @@
+﻿@model K_12.WEB.Models.Staff.StaffClaimViewModel
+
+
+<text>
+    <script type="text/javascript">
+
+        
+    </script>
+</text>
+<div id="staffClaimForm">
+
+    @using (Ajax.BeginForm(
+                                                            "Claim",
+                                                            null,
+
+                                                            new AjaxOptions()
+                                                            {
+
+                                                                InsertionMode = InsertionMode.Replace,
+                                                                UpdateTargetId = "staffClaimForm",
+                                                                //OnSuccess = "onSuccess"
+                                                                OnSuccess = "$('#astaffClaimForm').hide().fadeIn('slow')"
+
+
+
+
+                                                            },
+                                                            new { @class = "form-horizontal" } // htmlAttributes
+
+
+                                                            ))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend>Student Info</legend>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <div class="col-sm-3">
+                    @Html.LabelFor(m => m.FName, "Full Name", new { @class = "col-sm-4 control-label", style = "width:100%;" })
+                </div>
+
+
+                <div class="col-sm-3">
+                    @*<span class="k-textbox k-space-right" style="width:100%;">*@
+                    @Html.TextBoxFor(model => model.FName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "First Name" })
+                    @*<a href="#" class="k-icon k-i-arrow-s">&nbsp;</a>*@
+                    @*</span>*@
+                    <span class="has-error">  @Html.ValidationMessageFor(model => model.FName) </span>
+                </div>
+
+
+                <div class="col-sm-3">
+                    @Html.TextBoxFor(model => model.MName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Father Name" })
+                </div>
+
+                <div class="col-sm-3">
+                    @Html.TextBoxFor(model => model.LName, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "G.Father Name" })
+                </div>
+            </div>
+
+            <!-- Select Basic -->
+            <div class="form-group">
+                <div class="col-sm-3">
+                    @Html.LabelFor(m => m.Gender, "Gender", new { @class = "col-sm-4 control-label", style = "width:100%;" })
+                </div>
+                <div class="col-sm-3">
+
+                    @(Html.Kendo().ComboBoxFor(m => m.Gender)
+
+            .Placeholder("Select Gender")
+            .DataTextField("Text")
+            .DataValueField("Value")
+
+          .BindTo(new List<SelectListItem>() {
+              new SelectListItem() {
+                Text = "Male", Value = "M"
+              },
+              new SelectListItem() {
+                Text = "Female", Value = "F"
+              },
+
+          })
+                    )
+
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-3">
+                    @Html.LabelFor(m => m.StaffType, "Staff Stype", new { @class = "col-sm-4 control-label", style = "width:100%;" })
+                </div>
+                <div class="col-sm-3">
+
+                    @(Html.Kendo().ComboBoxFor(m => m.StaffType)
+
+            .Placeholder("Staff Type")
+               .BindTo(K_12.BLL.Constants.StaffTypes.avarailbleStaffTypes)
+                    )
+
+
+                </div>
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend>Contact Info</legend>
+            @*@Html.EditorFor(model => model.Contacts)*@
+
+
+
+
+
+            <!-- Text input-->
+            <div class="form-group">
+                @Html.LabelFor(m => m.MobilePhone, "Phone Number", new { @class = "col-sm-4 control-label" })
+
+
+                <div class="col-sm-4">
+                    <span class="k-textbox k-space-left" style="width:100%;">
+
+                        @(Html.Kendo().MaskedTextBoxFor(model => model.MobilePhone)
+                .HtmlAttributes(new { @PlaceHolder = "Mobile" })
+                .Mask("9999 00-00-00") )
+                        <span class="k-icon glyphicon-earphone)">&nbsp;</span>
+
+
+                    </span>
+                </div>
+
+
+
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, "Email", new { @class = "col-sm-4 control-label" })
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(model => model.Email, new { @class = "k-textbox", style = "width:100%;", @PlaceHolder = "Email" })
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </fieldset>
+
+
+    <!-- Button(Double) -->
+
+        <div class="row">
+
+
+            <div class="col-sm-offset-8 col-sm-4 right">
+                @Html.Kendo().Button().Name("btnReset").Content("Reset").HtmlAttributes(new { @class = "k-button k-danger", type = "submit", name = "ButtonType", value = "Reset" })
+                @Html.Kendo().Button().Name("BtnSave").Content("Save").HtmlAttributes(new { @class = "k-button k-primary", type = "submit", name = "ButtonType", value = "Save" }).Icon("plus")
+            </div>
+        </div>
+
+
+
+    }
+    @*form end*@
+
+
+</div>
+

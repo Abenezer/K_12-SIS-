@@ -66,9 +66,9 @@ public class UnitOfWork : IUnitOfWork
         get { return new SubjectRepository(_context); }
     }
 
-    public IStaffclaimRepository StaffClaims
+    public IStaffRepository Staffs
     {
-        get { return new StaffclaimRepository(_context); }
+        get { return new StaffRepository(_context); }
     }
 
     public IPersonRepository Persons
